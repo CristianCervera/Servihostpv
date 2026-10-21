@@ -1,0 +1,189 @@
+---
+// "Close-ups on a board": each tile shows one real piece of the interface, enlarged and cropped.
+---
+
+<section id="funciones" class="frame pt-[clamp(120px,14vw,200px)]" aria-labelledby="funciones-title">
+  <div class="board">
+    <div class="tile t-head bg-surface p-5 md:p-6" data-rise>
+      <h2 id="funciones-title" class="text-head">Todo el local en una pantalla</h2>
+    </div>
+
+    <!-- Comanderas -->
+    <div class="tile t-a bg-accent text-white" data-rise style="--i:1">
+      <div class="mag" data-ui aria-hidden="true" style="font-size:clamp(1.6rem,3vw,2.9rem);top:0.55em;left:0.6em;right:0">
+        <div class="flex gap-[0.25em]">
+          <span class="key bg-white text-ink">Mesa 4</span>
+          <span class="key bleed bg-field text-white">+ Clóchinas</span>
+        </div>
+        <div class="mt-[0.25em] flex gap-[0.25em]">
+          <span class="key bg-white text-ink">+ Caña</span>
+          <span class="key bleed bg-white text-ink">Cobrar</span>
+        </div>
+      </div>
+      <div class="cap">
+        <h3 class="cap-title">Comanderas Android</h3>
+        <p>La comanda sale de la mesa y se imprime sola en cocina y en barra. Se acabaron los olvidos.</p>
+      </div>
+    </div>
+
+    <!-- Monitor de cocina -->
+    <div class="tile t-b bg-field text-white" data-rise style="--i:2">
+      <div class="mag" data-ui aria-hidden="true" style="font-size:clamp(1.4rem,2.2vw,2.2rem);top:0;left:20px;right:-3em">
+        <div class="bg-accent px-[0.4em] pb-[0.2em] pt-[0.6em] font-semibold tabular-nums">#12 · 08:19</div>
+        <div class="bg-field-2 px-[0.4em] pb-[1.4em] pt-[0.25em]">2 Esgarraet</div>
+      </div>
+      <div class="cap">
+        <h3 class="cap-title">Monitor de cocina</h3>
+        <p>Cada pedido con su tiempo, avisos con sonido y cero papel.</p>
+      </div>
+    </div>
+
+    <!-- Carta digital -->
+    <div class="tile t-c bg-surface" data-rise style="--i:3">
+      <div class="mag" data-ui aria-hidden="true" style="font-size:clamp(1.3rem,2vw,2rem);top:0.8em;left:-0.7em">
+        <div class="flex items-center gap-[0.35em]">
+          <span class="relative inline-block h-[1.1em] w-[1.9em] rounded-full bg-accent">
+            <span class="absolute right-[0.12em] top-[0.12em] h-[0.86em] w-[0.86em] rounded-full bg-white"></span>
+          </span>
+          <span class="font-medium">Pagar en mesa</span>
+        </div>
+      </div>
+      <div class="cap">
+        <h3 class="cap-title">Carta digital</h3>
+        <p>El cliente pide y paga desde su móvil; el pedido entra directo al TPV.</p>
+      </div>
+    </div>
+
+    <!-- Stock -->
+    <div class="tile t-d bg-surface" data-rise style="--i:1">
+      <div class="mag" data-ui aria-hidden="true" style="font-size:clamp(3rem,7vw,7.5rem);top:-0.18em;right:-0.06em;line-height:0.9">
+        <span class="font-semibold tracking-[-0.05em] text-accent">Quedan 4</span>
+      </div>
+      <div class="cap">
+        <h3 class="cap-title">Stock y escandallos</h3>
+        <p>Cuando un plato se acaba, la comandera lo sabe.</p>
+      </div>
+    </div>
+
+    <!-- Back office -->
+    <div class="tile t-g bg-field text-white" data-rise style="--i:2">
+      <div class="mag mag-g" data-ui aria-hidden="true" style="top:28px;left:20px;right:-2em">
+        <div class="text-[1em] font-semibold leading-none tracking-[-0.05em] tabular-nums">2.418,60 €</div>
+        <div class="mt-[0.18em] flex items-end gap-[0.06em]" style="height:0.9em">
+          {[38, 52, 44, 61, 70, 58, 82, 95, 66, 74, 88, 100].map((h, i) => (
+            <span class={`block w-[0.22em] ${i === 11 ? 'bg-accent' : 'bg-field-2'}`} style={`height:${h}%`}></span>
+          ))}
+        </div>
+      </div>
+      <div class="cap">
+        <h3 class="cap-title">Back office en la nube: ventas de hoy en 3 locales</h3>
+        <p>Ventas, márgenes y stock de todos tus locales desde cualquier navegador. Y tu asesor con acceso propio.</p>
+      </div>
+    </div>
+
+    <!-- Delivery -->
+    <div class="tile t-e bg-accent text-white" data-rise style="--i:3">
+      <div class="mag" data-ui aria-hidden="true" style="font-size:clamp(1.6rem,2.6vw,2.6rem);top:-0.35em;right:-0.4em">
+        <div class="flex">
+          <span class="disc bg-white text-ink">G</span>
+          <span class="disc -ml-[0.4em] bg-field text-white">U</span>
+          <span class="disc -ml-[0.4em] bg-white text-accent">D</span>
+        </div>
+      </div>
+      <div class="cap">
+        <h3 class="cap-title">Delivery integrado</h3>
+        <p>Glovo, Uber Eats y Deliveroo entran solos.</p>
+      </div>
+    </div>
+
+    <!-- Salones -->
+    <div class="tile t-f bg-surface" data-rise style="--i:4">
+      <div class="mag" data-ui aria-hidden="true" style="font-size:clamp(1.3rem,2vw,2rem);top:0.6em;left:-0.4em">
+        <div class="flex gap-[0.2em] font-medium">
+          <span class="key bg-white pl-[0.9em]">Salón</span>
+          <span class="key bg-ink text-white">Terraza</span>
+        </div>
+      </div>
+      <div class="cap">
+        <h3 class="cap-title">Salones y terrazas</h3>
+        <p>Varias salas, mesas y habitaciones.</p>
+      </div>
+    </div>
+
+    <!-- Retail -->
+    <div class="tile t-h bg-surface" data-rise style="--i:1">
+      <div class="mag" data-ui aria-hidden="true" style="font-size:clamp(1.3rem,2vw,2rem);top:0.6em;left:20px;right:0">
+        <div class="flex gap-[0.2em] font-medium">
+          <span class="key bg-white">Talla M</span>
+          <span class="key bleed bg-accent text-white">Rojo</span>
+        </div>
+      </div>
+      <div class="cap">
+        <h3 class="cap-title">Tiendas con ZPOS</h3>
+        <p>Tallas, colores, stock mínimo y fidelización.</p>
+      </div>
+    </div>
+
+    <!-- Ecommerce -->
+    <div class="tile t-i bg-field text-white" data-rise style="--i:2">
+      <div class="mag" data-ui aria-hidden="true" style="font-size:clamp(1.3rem,2vw,2rem);top:0.6em;left:20px;right:0">
+        <div class="flex items-center gap-[0.3em]">
+          <span class="key bleed bg-accent text-white">Publicado</span>
+        </div>
+      </div>
+      <div class="cap">
+        <h3 class="cap-title">Tienda online</h3>
+        <p>WordPress, Prestashop y Shopify, sincronizados.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .board {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 28vw;
+  }
+  .tile { position: relative; overflow: hidden; }
+  .t-head { grid-column: span 2; grid-row: span 2; }
+  .t-a, .t-g { grid-column: span 2; grid-row: span 3; }
+  .t-d { grid-column: span 2; grid-row: span 2; }
+  .t-b, .t-c, .t-e, .t-f, .t-h, .t-i { grid-row: span 2; }
+
+  @media (min-width: 768px) {
+    .board { grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-rows: 104px; }
+    .t-head { grid-column: 1 / 7; grid-row: 1 / 3; }
+    .t-a { grid-column: 7 / 13; grid-row: 1 / 5; }
+    .t-b { grid-column: 1 / 4; grid-row: 3 / 7; }
+    .t-c { grid-column: 4 / 7; grid-row: 3 / 7; }
+    .t-d { grid-column: 7 / 13; grid-row: 5 / 7; }
+    .t-g { grid-column: 1 / 7; grid-row: 7 / 11; }
+    .t-e { grid-column: 7 / 10; grid-row: 7 / 9; }
+    .t-f { grid-column: 10 / 13; grid-row: 7 / 9; }
+    .t-h { grid-column: 7 / 10; grid-row: 9 / 11; }
+    .t-i { grid-column: 10 / 13; grid-row: 9 / 11; }
+  }
+
+  .mag { position: absolute; white-space: nowrap; line-height: 1.15; }
+  .key { display: inline-block; padding: 0.22em 0.5em; }
+  .disc {
+    display: inline-grid; place-items: center;
+    width: 2.2em; height: 2.2em; border-radius: 999px; font-weight: 600;
+  }
+  .cap { position: absolute; left: 20px; right: 20px; bottom: 18px; max-width: 34ch; }
+  .cap p { font-size: 1rem; line-height: 1.4; margin-top: 4px; }
+  .bleed { flex: 1; padding-right: 3em; }
+  .mag-g { font-size: clamp(3.5rem, 8vw, 7.5rem); }
+  .cap-title { font-size: var(--text-body); font-weight: 600; letter-spacing: -0.015em; line-height: 1.2; color: inherit; }
+  .bg-surface .cap p { color: var(--color-ink); }
+
+  @media (max-width: 767px) {
+    .t-b .cap p, .t-c .cap p, .t-e .cap p, .t-f .cap p, .t-h .cap p, .t-i .cap p { display: none; }
+    .cap { left: 12px; right: 12px; bottom: 12px; }
+    .mag { font-size: 1.125rem !important; }
+    .t-d .mag { font-size: 3.4rem !important; }
+    .t-g .mag { font-size: 3rem !important; }
+  }
+</style>

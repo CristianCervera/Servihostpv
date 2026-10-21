@@ -1,0 +1,69 @@
+---
+---
+
+<section id="demo" class="wrap pb-[clamp(100px,12vw,180px)] pt-[clamp(100px,12vw,180px)]" aria-labelledby="demo-title">
+  <div class="text-center">
+    <h2 id="demo-title" class="text-display leading-[0.95] tracking-[-0.05em]" data-rise>Pide tu demo.</h2>
+    <p class="mx-auto mt-6 max-w-[40ch] text-lead text-grey" data-rise style="--i:1">
+      Vamos a tu local, vemos cómo trabajas y te proponemos el equipo justo.
+    </p>
+  </div>
+
+  <form class="mx-auto mt-14 grid max-w-[680px] gap-3 sm:grid-cols-2" data-contact novalidate data-rise style="--i:2">
+    <div><label class="flabel" for="f-name">Nombre</label><input id="f-name" name="nombre" class="field" autocomplete="name" required /></div>
+    <div><label class="flabel" for="f-tel">Teléfono</label><input id="f-tel" name="telefono" class="field" type="tel" inputmode="tel" autocomplete="tel" required /></div>
+    <div><label class="flabel" for="f-mail">Email (opcional)</label><input id="f-mail" name="email" class="field" type="email" autocomplete="email" /></div>
+    <div>
+      <label class="flabel" for="f-biz">Tu negocio</label>
+      <select id="f-biz" name="negocio" class="field">
+        <option>Bar o cafetería</option><option>Restaurante</option><option>Comida para llevar</option><option>Tienda o comercio</option><option>Hotel u ocio</option><option>Otro</option>
+      </select>
+    </div>
+    <div class="sm:col-span-2 mt-4 flex flex-col items-center gap-3">
+      <button type="submit" class="pill !min-h-[52px] !px-10 !text-[18px]">Enviar solicitud</button>
+      <p class="min-h-[1.5rem] text-[15px] text-grey" data-form-status role="status"></p>
+    </div>
+  </form>
+
+  <div class="mt-10 grid gap-6 text-center sm:grid-cols-3">
+    <div><div class="text-[15px] text-grey">Servicio técnico</div><a class="more mt-1 justify-center text-[21px]" href="tel:+34633748236">633 748 236</a></div>
+    <div><div class="text-[15px] text-grey">Comercial</div><a class="more mt-1 justify-center text-[21px]" href="tel:+34633088505">633 088 505</a></div>
+    <div><div class="text-[15px] text-grey">Email</div><a class="more mt-1 justify-center text-[21px]" href="mailto:info@servihostpv.com">info@servihostpv.com</a></div>
+  </div>
+</section>
+
+<style>
+  .flabel { display: block; margin: 0 0 6px 4px; font-size: 14px; color: var(--color-grey); }
+  .field {
+    width: 100%; min-height: 56px; padding: 0 18px; border-radius: 14px;
+    background: #1d1d1f; color: #f5f5f7; font-size: 17px;
+    border: 1px solid #424245; appearance: none; transition: border-color 200ms;
+  }
+  .field:focus-visible { outline: none; border-color: var(--color-red-hi); box-shadow: 0 0 0 3px rgba(255, 90, 79, 0.35); }
+  .field[aria-invalid='true'] { border-color: var(--color-red-hi); }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact]');
+  if (form) {
+    const status = form.querySelector<HTMLElement>('[data-form-status]')!;
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const d = new FormData(form);
+      const name = String(d.get('nombre') ?? '').trim();
+      const tel = String(d.get('telefono') ?? '').trim();
+      const nameEl = form.querySelector<HTMLInputElement>('#f-name')!;
+      const telEl = form.querySelector<HTMLInputElement>('#f-tel')!;
+      nameEl.setAttribute('aria-invalid', String(!name));
+      telEl.setAttribute('aria-invalid', String(!tel));
+      if (!name || !tel) {
+        status.textContent = !name ? 'Escribe tu nombre para saber a quién llamar.' : 'Déjanos un teléfono para llamarte.';
+        (!name ? nameEl : telEl).focus();
+        return;
+      }
+      const body = `Hola, quiero una demo de TPV en mi local.\n\nNombre: ${name}\nTeléfono: ${tel}\nEmail: ${d.get('email') || '-'}\nNegocio: ${d.get('negocio')}\n`;
+      window.location.href = `mailto:info@servihostpv.com?subject=${encodeURIComponent('Demo de TPV para ' + name)}&body=${encodeURIComponent(body)}`;
+      status.textContent = 'Abriendo tu correo con la solicitud lista para enviar.';
+    });
+  }
+</script>

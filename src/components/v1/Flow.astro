@@ -1,0 +1,130 @@
+---
+// "Many into one": sales from every device are scattered, squeezed through the cloud, and come out ordered.
+interface Sq { x: number; y: number; sx: number; sy: number; fill: string; d: number }
+
+function rng(seed: number) {
+  return () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+}
+
+function build(vertical: boolean): { w: number; h: number; s: number; squares: Sq[] } {
+  const r = rng(vertical ? 7 : 11);
+  const s = 12;
+  const W = vertical ? 300 : 1200;
+  const H = vertical ? 400 : 267;
+  // Work in a "long axis / short axis" frame and swap for the vertical version.
+  const L = vertical ? H : W;
+  const S = vertical ? W : H;
+  const out: Sq[] = [];
+  const put = (a: number, b: number, sa: number, sb: number, fill: string) => {
+    const [x, y] = vertical ? [b, a] : [a, b];
+    const [sx, sy] = vertical ? [sb, sa] : [sa, sb];
+    out.push({ x, y, sx, sy, fill, d: a / L });
+  };
+  const third = L / 3;
+  // Scatter: loose, two pale tones.
+  for (let i = 0; i < 45; i++) {
+    const a = r() * (third - 40);
+    const b = r() * (S - s);
+    put(a, b, a + (r() - 0.5) * 80, b + (r() - 0.5) * 80, i % 3 === 0 ? '#bdbdbd' : '#dcdcdc');
+  }
+  // Ribbon: three squares high, in ink.
+  const cols = vertical ? 7 : 22;
+  const ribbonStart = third + (third - cols * 16) / 2;
+  for (let c = 0; c < cols; c++) {
+    for (let k = 0; k < 3; k++) {
+      const a = ribbonStart + c * 16;
+      const b = S / 2 - 24 + k * 16;
+      put(a, b, r() * (third - 40), r() * (S - s), '#0a0a0a');
+    }
+  }
+  // Order: evenly spaced rows, in the accent.
+  const oc = vertical ? 4 : 8;
+  const orr = vertical ? 6 : 6;
+  const a0 = 2 * third + 30;
+  const stepA = (L - s - a0) / (oc - 1);
+  const stepB = (S - s - 20) / (orr - 1);
+  for (let c = 0; c < oc; c++) {
+    for (let k = 0; k < orr; k++) {
+      put(a0 + c * stepA, 10 + k * stepB, ribbonStart + (cols - 1) * 16, S / 2 - 24 + (k % 3) * 16, '#d92b21');
+    }
+  }
+  return { w: W, h: H, s, squares: out };
+}
+
+const wide = build(false);
+const tall = build(true);
+
+const steps = [
+  { name: 'Vendes', text: 'El TPV, las comanderas, la carta digital, tu web y las apps de delivery registran cada venta.' },
+  { name: 'Sincroniza', text: 'Todo se copia en la nube cada 20 segundos, sin que nadie tenga que acordarse.' },
+  { name: 'Decides', text: 'Ventas, márgenes y stock en el back office, en PDF o Excel, con acceso para tu asesor.' },
+];
+---
+
+<section class="frame pt-[clamp(120px,14vw,200px)] pb-[clamp(96px,10vw,160px)]" aria-labelledby="flow-title">
+  <div class="grid-12 gap-y-6">
+    <h2 id="flow-title" class="col-span-12 text-head md:col-span-6" data-rise>Todos tus locales, una sola cuenta</h2>
+    <p class="col-span-12 max-w-[44ch] self-end md:col-span-5 md:col-start-8" data-rise style="--i:1">
+      Integra varios locales en una sola plataforma y gestiona proveedores, altas de artículos, promociones y
+      stock desde fuera, sin pasar por el mostrador.
+    </p>
+  </div>
+
+  <div class="flow mt-14 md:mt-20" data-flow>
+    <svg class="hidden w-full md:block" viewBox={`0 0 ${wide.w} ${wide.h}`} role="img" aria-label="Diagrama: ventas dispersas que pasan por la nube y salen ordenadas en informes">
+      {wide.squares.map((q) => (
+        <rect x={q.x} y={q.y} width={wide.s} height={wide.s} fill={q.fill} data-dx={(q.sx - q.x).toFixed(1)} data-dy={(q.sy - q.y).toFixed(1)} data-d={q.d.toFixed(3)} />
+      ))}
+    </svg>
+
+    <div class="grid grid-cols-[42%_1fr] gap-x-5 gap-y-8 md:mt-10 md:grid-cols-3 md:gap-[var(--g)]">
+      <svg class="row-span-3 w-full md:hidden" viewBox={`0 0 ${tall.w} ${tall.h}`} role="img" aria-label="Diagrama: ventas dispersas que pasan por la nube y salen ordenadas en informes">
+        {tall.squares.map((q) => (
+          <rect x={q.x} y={q.y} width={tall.s} height={tall.s} fill={q.fill} data-dx={(q.sx - q.x).toFixed(1)} data-dy={(q.sy - q.y).toFixed(1)} data-d={q.d.toFixed(3)} />
+        ))}
+      </svg>
+      {steps.map((st, i) => (
+        <div class="self-center md:self-start" data-rise style={`--i:${i}`}>
+          <h3 class="text-lead tracking-[-0.02em]">{st.name}</h3>
+          <p class="mt-2 max-w-[32ch]">{st.text}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const flow = document.querySelector<HTMLElement>('[data-flow]');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (flow && !reduce) {
+    const rects = [...flow.querySelectorAll<SVGRectElement>('rect')].map((el) => ({
+      el,
+      dx: +el.dataset.dx!,
+      dy: +el.dataset.dy!,
+      d: +el.dataset.d!,
+    }));
+    const ease = (t: number) => 1 - Math.pow(1 - t, 3);
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const box = flow.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // 0 when the diagram enters the bottom of the screen, 1 when its middle reaches 45% height.
+      const p = Math.min(1, Math.max(0, (vh - box.top) / (vh * 0.55 + box.height * 0.5)));
+      for (const r of rects) {
+        const t = ease(Math.min(1, Math.max(0, (p - r.d * 0.45) / 0.55)));
+        const k = 1 - t;
+        r.el.style.transform = `translate(${r.dx * k}px, ${r.dy * k}px)`;
+      }
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+  }
+</script>

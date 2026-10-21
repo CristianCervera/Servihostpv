@@ -1,0 +1,401 @@
+---
+type Dest = 'cocina' | 'barra';
+interface Item { name: string; price: number; dest: Dest }
+
+const families: { name: string; color: string; items: Item[] }[] = [
+  { name: 'Barra', color: '#f2a516', items: [
+    { name: 'Café con leche', price: 1.6, dest: 'barra' },
+    { name: 'Cortado', price: 1.4, dest: 'barra' },
+    { name: 'Caña', price: 2.2, dest: 'barra' },
+    { name: 'Horchata', price: 2.8, dest: 'barra' },
+    { name: 'Agua de Valencia', price: 14, dest: 'barra' },
+    { name: 'Tinto de verano', price: 3, dest: 'barra' },
+    { name: 'Café solo', price: 1.2, dest: 'barra' },
+    { name: 'Agua mineral', price: 1.5, dest: 'barra' },
+    { name: 'Copa de cava', price: 3.5, dest: 'barra' },
+  ] },
+  { name: 'Tapas', color: '#d92b21', items: [
+    { name: 'Esgarraet', price: 7.5, dest: 'cocina' },
+    { name: 'Clóchinas', price: 9, dest: 'cocina' },
+    { name: 'Bravas', price: 5.5, dest: 'cocina' },
+    { name: 'Sepia', price: 11, dest: 'cocina' },
+    { name: 'Titaina', price: 8, dest: 'cocina' },
+    { name: 'Calamar', price: 9.5, dest: 'cocina' },
+    { name: 'Ensaladilla', price: 5, dest: 'cocina' },
+    { name: 'Puntilla', price: 8.5, dest: 'cocina' },
+    { name: 'All i pebre', price: 12, dest: 'cocina' },
+  ] },
+  { name: 'Arroces', color: '#ff8a3d', items: [
+    { name: 'Paella valenciana', price: 14, dest: 'cocina' },
+    { name: 'Arroz a banda', price: 13.5, dest: 'cocina' },
+    { name: 'Arroz negro', price: 13.5, dest: 'cocina' },
+    { name: 'Fideuà', price: 13, dest: 'cocina' },
+    { name: 'Arroz al horno', price: 12, dest: 'cocina' },
+    { name: 'Senyoret', price: 15, dest: 'cocina' },
+    { name: 'Arroz con costra', price: 14.5, dest: 'cocina' },
+    { name: 'Paella de marisco', price: 16, dest: 'cocina' },
+    { name: 'Meloso de pato', price: 15.5, dest: 'cocina' },
+  ] },
+  { name: 'Almuerzo', color: '#34a853', items: [
+    { name: 'Almuerzo completo', price: 7.5, dest: 'cocina' },
+    { name: 'Bocadillo brascada', price: 6.5, dest: 'cocina' },
+    { name: 'Chivito', price: 6.9, dest: 'cocina' },
+    { name: 'Cremaet', price: 2.2, dest: 'barra' },
+    { name: 'Cacaus i tramussos', price: 2, dest: 'barra' },
+    { name: 'Zumo de naranja', price: 3.2, dest: 'barra' },
+    { name: 'Bocadillo de tortilla', price: 5.5, dest: 'cocina' },
+    { name: 'Sobrasada y queso', price: 5.8, dest: 'cocina' },
+    { name: 'Café del temps', price: 2, dest: 'barra' },
+  ] },
+];
+
+const eur = (n: number) => n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+const all = families.flatMap((f) => f.items);
+const starter = (['Clóchinas', 'Esgarraet', 'Agua de Valencia'] as const).map((name) => ({ ...all.find((i) => i.name === name)!, qty: 1 }));
+const starterTotal = starter.reduce((s, l) => s + l.price, 0);
+---
+
+<section id="top" class="hero relative" aria-labelledby="hero-title">
+  <div class="hero-stage relative flex flex-col items-center overflow-hidden">
+    <div class="hero-copy wrap relative z-10 pt-[clamp(28px,5vh,64px)] text-center">
+      <h1 id="hero-title" class="text-[clamp(2.75rem,8.4vw,7.5rem)] font-semibold leading-[0.95] tracking-[-0.045em]">SERVIHOST TPV</h1>
+      <p class="mx-auto mt-4 max-w-[30ch] text-[clamp(1.375rem,2.4vw,2rem)] font-semibold leading-[1.15] tracking-[-0.02em]">
+        Cobra. Comanda. Controla.<span class="block text-grey">Todo desde una pantalla.</span>
+      </p>
+    </div>
+
+    <div class="device-wrap relative z-0 mt-8 w-full">
+      <div class="glow" data-glow aria-hidden="true"></div>
+      <div class="device" data-device>
+        <div class="bezel">
+          <div class="screen" data-comandera role="group" aria-label="Comandera de prueba: toca productos para añadirlos a la cuenta de la mesa 4">
+            <div class="ui">
+              <div class="ui-top">
+                <span class="font-semibold">Terraza · Mesa 4</span>
+                <span class="ui-dim">Ana · 4 comensales</span>
+                <span class="tabular-nums" data-clock>13:42</span>
+              </div>
+              <div class="ui-body">
+                <div class="ui-left">
+                  <div class="ui-tabs" role="tablist" aria-label="Familias">
+                    {families.map((f, i) => (
+                      <button type="button" role="tab" class="ui-tab" style={`--fam:${f.color}`} aria-selected={i === 0 ? 'true' : 'false'} aria-controls={`fam-${i}`} id={`tab-${i}`} data-cat={i}>{f.name}</button>
+                    ))}
+                  </div>
+                  {families.map((f, i) => (
+                    <div class="ui-grid" role="tabpanel" id={`fam-${i}`} aria-labelledby={`tab-${i}`} hidden={i !== 0}>
+                      {f.items.map((it) => (
+                        <button type="button" class="ui-prod" style={`--fam:${f.color}`} data-name={it.name} data-price={it.price} data-dest={it.dest} aria-label={`Añadir ${it.name}, ${eur(it.price)}`}>
+                          <span class="ui-prod-name">{it.name}</span>
+                          <span class="ui-prod-price tabular-nums">{eur(it.price)}</span>
+                        </button>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+                <div class="ui-ticket">
+                  <div class="flex items-baseline justify-between">
+                    <span class="font-semibold">Cuenta</span>
+                    <span class="ui-dim" data-count>{starter.length} líneas</span>
+                  </div>
+                  <ul class="ui-lines" data-lines aria-live="polite">
+                    {starter.map((l) => (
+                      <li class="flex justify-between gap-2"><span>{l.qty} × {l.name}</span><span class="tabular-nums">{eur(l.price)}</span></li>
+                    ))}
+                  </ul>
+                  <div class="ui-total">
+                    <span>Total</span>
+                    <span class="ui-total-n tabular-nums" data-total>{eur(starterTotal)}</span>
+                  </div>
+                  <button type="button" class="ui-send" data-send>Enviar a cocina y barra</button>
+                  <p class="ui-status" data-status role="status"></p>
+                </div>
+              </div>
+            </div>
+            <div class="screen-off" data-screen-off aria-hidden="true"></div>
+          </div>
+        </div>
+        <div class="stand" aria-hidden="true"><span class="neck"></span><span class="base"></span></div>
+      </div>
+
+      <div class="printer" aria-hidden="true">
+        <div class="printer-out" data-printed aria-live="polite"></div>
+        <div class="printer-body"><span class="printer-slot"></span><span class="printer-led"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-cta wrap relative z-10 flex flex-col items-center gap-5 pb-24 pt-10 text-center md:pt-14" data-rise>
+    <p class="max-w-[46ch] text-lead text-grey">
+      <span class="text-snow">Pruébala ahora:</span> toca la carta y envía la comanda. El ticket de cocina y el de barra salen solos, como en tu local.
+    </p>
+    <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
+      <a class="pill" href="#demo">Pedir una demo</a>
+      <a class="more" href="tel:+34633748236">Llamar al 633 748 236</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-stage { min-height: calc(100svh - 96px); }
+
+  .device-wrap { display: flex; justify-content: center; perspective: 2200px; padding-inline: 12px; }
+  .device { width: min(900px, 90vw, (100svh - 210px) * 1.45); transform-origin: 50% 100%; will-change: transform; }
+
+  .bezel {
+    padding: clamp(8px, 1.3%, 14px);
+    border-radius: clamp(18px, 2.4%, 26px);
+    background: #0d0d0e;
+    box-shadow: inset 0 0 0 1px #3a3a3c, 0 0 0 1px #000;
+  }
+  .screen {
+    position: relative; overflow: hidden; aspect-ratio: 16 / 10;
+    border-radius: clamp(8px, 1.1%, 12px);
+    container-type: inline-size;
+    background: #eef0f3;
+  }
+  .screen-off {
+    position: absolute; inset: 0; pointer-events: none;
+    background: #050506;
+  }
+  .glow {
+    position: absolute; left: 50%; bottom: 4%; width: min(1100px, 100vw); height: 70%; translate: -50% 0;
+    background: radial-gradient(50% 50% at 50% 60%, rgba(217, 43, 33, 0.38), rgba(255, 138, 61, 0.12) 45%, transparent 72%);
+    filter: blur(30px); opacity: 0; pointer-events: none;
+  }
+  .stand { display: flex; flex-direction: column; align-items: center; }
+  .neck { width: 16%; height: clamp(34px, 7vh, 70px); background: #2c2c2e; }
+  .base { width: 42%; height: 12px; border-radius: 0 0 14px 14px; background: #3a3a3c; }
+
+  /* The POS interface, sized in screen units so it scales like a real display. */
+  .ui { --u: 1cqi; position: absolute; inset: 0; display: flex; flex-direction: column; color: #111; font-size: calc(var(--u) * 1.85); letter-spacing: -0.01em; line-height: 1.25; }
+  .ui-top { display: flex; align-items: center; justify-content: space-between; gap: 1em; padding: 0 calc(var(--u) * 2); height: calc(var(--u) * 5); background: #111; color: #fff; flex: none; }
+  .ui-dim { color: #8e8e93; }
+  .ui-top .ui-dim { color: #a1a1a6; }
+  .ui-body { flex: 1; display: grid; grid-template-columns: 1fr calc(var(--u) * 29); min-height: 0; }
+  .ui-left { padding: calc(var(--u) * 1.4); display: flex; flex-direction: column; gap: calc(var(--u) * 1); min-height: 0; }
+  .ui-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: calc(var(--u) * 0.8); }
+  .ui-tab {
+    min-height: max(44px, calc(var(--u) * 5.2)); border-radius: calc(var(--u) * 0.9);
+    background: #fff; color: #111; font-weight: 600; font-size: inherit;
+    box-shadow: inset 0 calc(var(--u) * -0.5) 0 var(--fam);
+    transition: transform 140ms var(--ease-out), background-color 160ms ease;
+  }
+  .ui-tab[aria-selected='true'] { background: var(--fam); color: #111; box-shadow: none; }
+  .ui-grid { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: calc(var(--u) * 0.8); min-height: 0; }
+  .ui-prod {
+    position: relative; display: flex; flex-direction: column; justify-content: space-between; text-align: left;
+    padding: calc(var(--u) * 1.2) calc(var(--u) * 1.3) calc(var(--u) * 1.1) calc(var(--u) * 1.8);
+    border-radius: calc(var(--u) * 0.9); background: #fff; font-size: inherit; min-height: 44px;
+    transition: transform 120ms var(--ease-out), background-color 160ms ease;
+  }
+  .ui-prod::before { content: ""; position: absolute; left: calc(var(--u) * 0.7); top: calc(var(--u) * 1.2); bottom: calc(var(--u) * 1.2); width: calc(var(--u) * 0.45); border-radius: 9px; background: var(--fam); }
+  .ui-prod-name { font-weight: 600; font-size: calc(var(--u) * 2); line-height: 1.15; }
+  .ui-prod-price { color: #6e6e73; }
+  .ui-prod.is-bump { background: #111; color: #fff; }
+  .ui-prod.is-bump .ui-prod-price { color: #d2d2d7; }
+  .ui-lines :global(li) { display: block; }
+  .ui-lines :global(.ui-dim) { color: #8e8e93; }
+  .ui-prod:active, .ui-tab:active, .ui-send:active { transform: scale(0.96); }
+  @media (hover: hover) and (pointer: fine) { .ui-prod:hover { background: #f7f7f9; } }
+  .ui-ticket { display: flex; flex-direction: column; gap: calc(var(--u) * 1); padding: calc(var(--u) * 1.8); background: #fff; min-height: 0; }
+  .ui-lines { flex: 1; overflow: auto; display: flex; flex-direction: column; gap: calc(var(--u) * 0.6); }
+  .ui-lines :global(button) { display: flex; width: 100%; justify-content: space-between; gap: 0.5em; text-align: left; }
+  .ui-total { display: flex; align-items: baseline; justify-content: space-between; padding-top: calc(var(--u) * 1); border-top: 2px dashed #d2d2d7; font-weight: 600; }
+  .ui-total-n { font-size: calc(var(--u) * 2.8); letter-spacing: -0.03em; }
+  .ui-send { min-height: max(44px, calc(var(--u) * 5.6)); border-radius: calc(var(--u) * 1); background: #d92b21; color: #fff; font-weight: 600; font-size: inherit; transition: transform 140ms var(--ease-out), opacity 200ms ease; }
+  .ui-send:disabled { opacity: 0.35; }
+  .ui-status { min-height: 1.3em; color: #6e6e73; font-size: calc(var(--u) * 1.5); }
+
+  /* Printer on the counter, beside the terminal. */
+  .printer { display: none; }
+  @media (min-width: 1400px) {
+    .printer { display: flex; flex-direction: column; align-items: center; position: absolute; bottom: 0; left: calc(50% + min(450px, 45vw, (100svh - 210px) * 0.725) + 26px); width: 224px; }
+    .printer-out { display: flex; gap: 6px; align-items: flex-end; justify-content: center; width: 100%; min-height: 10px; }
+    .printer-body { position: relative; width: 170px; height: 92px; border-radius: 14px 14px 8px 8px; background: #2c2c2e; box-shadow: inset 0 1px 0 #48484a; }
+    .printer-slot { position: absolute; left: 14px; right: 14px; top: 12px; height: 5px; border-radius: 3px; background: #0b0b0c; }
+    .printer-led { position: absolute; right: 16px; bottom: 14px; width: 6px; height: 6px; border-radius: 50%; background: #34c759; }
+  }
+  @media (max-width: 1399px) {
+    .printer { display: block; width: 100%; max-width: 980px; margin: 14px auto 0; }
+    .printer-out { display: flex; gap: 10px; justify-content: center; }
+    .printer-body { display: none; }
+  }
+
+  :global(.paper) {
+    width: 108px; background: #fff; color: #111; padding: 12px 12px 20px;
+    font-size: 12px; line-height: 1.35; padding: 10px 9px 18px; letter-spacing: -0.005em;
+    clip-path: polygon(0 0,100% 0,100% calc(100% - 7px),95.8% 100%,91.7% calc(100% - 7px),87.5% 100%,83.3% calc(100% - 7px),79.2% 100%,75% calc(100% - 7px),70.8% 100%,66.7% calc(100% - 7px),62.5% 100%,58.3% calc(100% - 7px),54.2% 100%,50% calc(100% - 7px),45.8% 100%,41.7% calc(100% - 7px),37.5% 100%,33.3% calc(100% - 7px),29.2% 100%,25% calc(100% - 7px),20.8% 100%,16.7% calc(100% - 7px),12.5% 100%,8.3% calc(100% - 7px),4.2% 100%,0 calc(100% - 7px));
+  }
+  @media (max-width: 1399px) { :global(.paper) { width: min(220px, 46vw); font-size: 13px; padding: 12px 12px 20px; } }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.paper) { animation: feed 1200ms steps(16, end) both; }
+    @keyframes feed { from { transform: translateY(100%); clip-path: inset(0 0 100% 0); } to { transform: none; } }
+  }
+  @media (max-width: 1399px) and (prefers-reduced-motion: no-preference) {
+    @keyframes feed { from { transform: translateY(-40%); opacity: 0; } to { transform: none; opacity: 1; } }
+  }
+
+  /* Phone: the terminal becomes a handheld comandera. */
+  @media (max-width: 767px) {
+    .device { width: min(420px, 100%); }
+    .bezel { border-radius: 34px; padding: 10px; }
+    .screen { aspect-ratio: auto; border-radius: 26px; }
+    .stand { display: none; }
+    .ui { --u: 2.5cqi; position: relative; }
+    .ui-body { grid-template-columns: 1fr; }
+    .ui-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: none; grid-auto-rows: calc(var(--u) * 7.5); }
+    .ui-tabs { grid-template-columns: repeat(4, 1fr); }
+    .ui-ticket { border-top: 1px solid #e5e5ea; }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const device = document.querySelector<HTMLElement>('[data-device]');
+  const off = document.querySelector<HTMLElement>('[data-screen-off]');
+
+  // The terminal stands up and switches on as the page scrolls.
+  if (device && off) {
+    if (reduce) {
+      off.style.opacity = '0';
+      document.querySelector<HTMLElement>('[data-glow]')!.style.opacity = '1';
+    } else {
+      const mm = gsap.matchMedia();
+      mm.add({ desk: '(min-width: 768px)', phone: '(max-width: 767px)' }, (ctx) => {
+        const desk = ctx.conditions!.desk;
+        const copy = document.querySelector<HTMLElement>('.hero-copy')!;
+        const cta = desk ? document.querySelector<HTMLElement>('.hero-cta') : null;
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: '.hero-stage',
+            start: 'top top+=52',
+            end: desk ? '+=110%' : '+=60%',
+            invalidateOnRefresh: true,
+            onRefresh: () => { if (cta) cta.style.marginTop = `${lift()}px`; },
+            scrub: 0.8,
+            pin: true,
+            anticipatePin: 1,
+          },
+        });
+        // On desktop the title gives way and the terminal rises into its place.
+        // Lift so the terminal ends centred in the space under the product bar.
+        const lift = () => {
+          if (!desk) return 0;
+          const avail = window.innerHeight - 52;
+          const natural = copy.offsetHeight + 32;
+          return Math.min(0, (avail - device.offsetHeight) / 2 - natural);
+        };
+        tl.fromTo(device, { rotateX: desk ? 62 : 24, y: desk ? 0 : '10%', scale: desk ? 0.8 : 0.92 }, { rotateX: 0, y: lift, scale: 1, ease: 'power2.out', duration: 1 }, 0)
+          .to(copy, { y: desk ? -120 : -20, opacity: desk ? 0 : 0.6, ease: 'power1.in', duration: 0.38 }, 0)
+          .fromTo('.printer', { y: 0 }, { y: lift, ease: 'power2.out', duration: 1 }, 0)
+          .fromTo(off, { opacity: 1 }, { opacity: 0, ease: 'power1.inOut', duration: 0.35 }, 0.62)
+          .fromTo('[data-glow]', { opacity: 0, y: 0 }, { opacity: 1, y: lift, ease: 'power1.inOut', duration: 0.4 }, 0.6);
+        if (cta) cta.style.marginTop = `${lift()}px`;
+        return () => { if (cta) cta.style.marginTop = ''; };
+      });
+    }
+  }
+
+  // The comandera itself.
+  const root = document.querySelector<HTMLElement>('[data-comandera]');
+  if (root) {
+    const eur = (n: number) => n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    type Line = { name: string; price: number; dest: string; qty: number };
+    const order = new Map<string, Line>();
+    for (const name of ['Clóchinas', 'Esgarraet', 'Agua de Valencia']) {
+      const b = root.querySelector<HTMLElement>(`.ui-prod[data-name="${name}"]`);
+      if (b) order.set(name, { name, price: +b.dataset.price!, dest: b.dataset.dest!, qty: 1 });
+    }
+    const lines = root.querySelector<HTMLUListElement>('[data-lines]')!;
+    const total = root.querySelector<HTMLElement>('[data-total]')!;
+    const count = root.querySelector<HTMLElement>('[data-count]')!;
+    const status = root.querySelector<HTMLElement>('[data-status]')!;
+    const send = root.querySelector<HTMLButtonElement>('[data-send]')!;
+    const printed = document.querySelector<HTMLElement>('[data-printed]')!;
+    const clock = root.querySelector<HTMLElement>('[data-clock]');
+    const now = () => new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    if (clock) { clock.textContent = now(); setInterval(() => (clock.textContent = now()), 30000); }
+
+    const render = () => {
+      lines.innerHTML = '';
+      let sum = 0;
+      for (const l of order.values()) {
+        sum += l.price * l.qty;
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.setAttribute('aria-label', `Quitar una unidad de ${l.name}`);
+        btn.innerHTML = `<span>${l.qty} × ${l.name}</span><span class="tabular-nums">${eur(l.price * l.qty)}</span>`;
+        btn.addEventListener('click', () => {
+          l.qty -= 1;
+          if (l.qty <= 0) order.delete(l.name);
+          render();
+        });
+        li.append(btn);
+        lines.append(li);
+      }
+      if (!order.size) {
+        const li = document.createElement('li');
+        li.className = 'ui-dim';
+        li.textContent = 'Mesa sin pedido. Toca un producto.';
+        lines.append(li);
+      }
+      total.textContent = eur(sum);
+      count.textContent = `${order.size} ${order.size === 1 ? 'línea' : 'líneas'}`;
+      send.disabled = order.size === 0;
+    };
+
+    root.querySelectorAll<HTMLButtonElement>('.ui-tab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        root.querySelectorAll<HTMLButtonElement>('.ui-tab').forEach((t) => {
+          const on = t === tab;
+          t.setAttribute('aria-selected', String(on));
+          root.querySelector<HTMLElement>(`#fam-${t.dataset.cat}`)!.hidden = !on;
+        });
+      });
+    });
+
+    root.querySelectorAll<HTMLButtonElement>('.ui-prod').forEach((b) => {
+      b.addEventListener('click', () => {
+        const name = b.dataset.name!;
+        const l = order.get(name) ?? { name, price: +b.dataset.price!, dest: b.dataset.dest!, qty: 0 };
+        l.qty += 1;
+        order.set(name, l);
+        status.textContent = '';
+        b.classList.add('is-bump');
+        setTimeout(() => b.classList.remove('is-bump'), 160);
+        render();
+      });
+    });
+
+    let n = 26;
+    send.addEventListener('click', () => {
+      if (!order.size) return;
+      n += 1;
+      const byDest: Record<string, Line[]> = { cocina: [], barra: [] };
+      for (const l of order.values()) byDest[l.dest].push(l);
+      printed.innerHTML = '';
+      for (const dest of ['cocina', 'barra']) {
+        if (!byDest[dest].length) continue;
+        const p = document.createElement('div');
+        p.className = 'paper';
+        p.innerHTML =
+          `<div style="display:flex;justify-content:space-between;font-weight:600"><span>${dest === 'cocina' ? 'Cocina' : 'Barra'}</span><span>#${n}</span></div>` +
+          `<div style="color:#6e6e73;margin-bottom:6px">Mesa 4 · ${now()}</div>` +
+          byDest[dest].map((l) => `<div>${l.qty} × ${l.name}</div>`).join('');
+        printed.append(p);
+      }
+      const sum = [...order.values()].reduce((s, l) => s + l.price * l.qty, 0);
+      status.textContent = `Comanda #${n} enviada · ${eur(sum)}`;
+      order.clear();
+      render();
+    });
+
+    render();
+  }
+</script>

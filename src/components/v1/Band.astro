@@ -1,0 +1,34 @@
+---
+import { zz } from '../../lib/zigzag';
+---
+
+<section class="band zz overflow-hidden bg-field py-[clamp(96px,11vw,170px)] text-white" style={zz({ top: true, bottom: true, depth: 14, teeth: 72, teethSm: 24 })} aria-labelledby="band-title">
+  <h2 id="band-title" class="pushed whitespace-nowrap px-[var(--m)] text-display !text-white">
+    Sigue cobrando sin internet
+  </h2>
+  <div class="frame grid-12 mt-10 md:mt-14">
+    <p class="col-span-12 max-w-[40ch] text-lead leading-[1.35] md:col-span-5 md:col-start-8" data-rise>
+      Nube híbrida: el punto de venta trabaja en local y en línea, y guarda todo en la nube en cuanto vuelve
+      la conexión. Ni un ticket perdido.
+    </p>
+  </div>
+</section>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .pushed {
+        animation: push linear both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+      }
+      @keyframes push {
+        from { transform: translateX(14%); }
+        to { transform: translateX(-14%); }
+      }
+    }
+  }
+  @media (max-width: 767px) {
+    .pushed { white-space: normal; }
+  }
+</style>

@@ -1,0 +1,146 @@
+---
+// The kitchen display, live: timers tick from page load and "Listo" clears a ticket.
+const orders = [
+  { n: 21, where: 'Terraza · Mesa 2', start: 742, lines: ['2 Paella valenciana', '1 All i pebre'] },
+  { n: 22, where: 'Barra · 3', start: 492, lines: ['2 Bravas', '1 Puntilla', '1 Ensaladilla'] },
+  { n: 23, where: 'Salón · Mesa 7', start: 361, lines: ['1 Arroz a banda', '1 Sepia', 'Sin gluten'] },
+  { n: 24, where: 'Para llevar', start: 245, lines: ['3 Bocadillo brascada', '1 Chivito'] },
+  { n: 25, where: 'Glovo · R-8841', start: 188, lines: ['2 Fideuà', '1 Calamar'] },
+  { n: 26, where: 'Terraza · Mesa 9', start: 96, lines: ['1 Titaina', '2 Esgarraet'] },
+  { n: 27, where: 'Terraza · Mesa 4', start: 14, lines: ['1 Clóchinas', '1 Esgarraet', '1 Paella valenciana'] },
+  { n: 28, where: 'Salón · Mesa 1', start: 3, lines: ['1 Senyoret', '1 Meloso de pato'] },
+];
+const mmss = (s: number) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+---
+
+<section id="cocina" class="kitchen relative mt-[clamp(100px,12vw,180px)]" aria-labelledby="kitchen-title">
+  <div class="wrap text-center">
+    <h2 id="kitchen-title" class="text-title" data-rise>Monitor de cocina.</h2>
+    <p class="mx-auto mt-4 max-w-[34ch] text-[clamp(1.5rem,3vw,2.5rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-grey" data-rise style="--i:1">
+      Adiós a las comandas de papel.
+    </p>
+  </div>
+
+  <div class="kitchen-stage" data-kitchen>
+    <div class="kwin" data-kwin>
+      <div class="kd" role="region" aria-label="Monitor de cocina de prueba: pulsa Listo para despachar un pedido">
+        <div class="kd-top">
+          <span class="font-semibold text-white">Cocina caliente</span>
+          <span><span data-k-pending>{orders.length}</span> en marcha · <span data-k-done>0</span> listos</span>
+          <span class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-[#30d158]"></span>En línea</span>
+        </div>
+        <ul class="kd-grid" data-k-grid>
+          {orders.map((o) => (
+            <li class="kd-card" data-start={o.start}>
+              <div class="kd-head"><span>#{o.n}</span><span class="tabular-nums" data-t>{mmss(o.start)}</span></div>
+              <div class="kd-where">{o.where}</div>
+              <ul class="kd-lines">{o.lines.map((l) => <li>{l}</li>)}</ul>
+              <button type="button" class="kd-ready" aria-label={`Marcar pedido ${o.n} como listo`}>Listo</button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap mt-16 grid gap-10 md:mt-20 md:grid-cols-3">
+    <div data-rise><h3 class="text-[21px] tracking-[-0.02em]">Cada pedido, con su tiempo.</h3><p class="mt-2 text-grey">El color cambia a ámbar y a rojo según espera, para servir los platos sincronizados.</p></div>
+    <div data-rise style="--i:1"><h3 class="text-[21px] tracking-[-0.02em]">Avisos con sonido.</h3><p class="mt-2 text-grey">Gestión gráfica e intuitiva, con aviso sonoro en cada comanda nueva y modo para llevar.</p></div>
+    <div data-rise style="--i:2"><h3 class="text-[21px] tracking-[-0.02em]">Más limpio, sin papel.</h3><p class="mt-2 text-grey">Pantalla táctil que se limpia entera, sin tickets que se mojan ni se pierden.</p></div>
+  </div>
+</section>
+
+<style>
+  .kitchen-stage { height: 100svh; display: grid; place-items: center; margin-top: 40px; overflow: hidden; }
+  .kwin { width: 100%; height: 100%; display: grid; place-items: center; transform-origin: 50% 50%; }
+  .kd {
+    width: min(1400px, 100%); height: 100%; background: #0b0b0c; color: #a1a1a6;
+    display: flex; flex-direction: column; overflow: hidden; border-radius: 28px;
+    box-shadow: inset 0 0 0 1px #2c2c2e;
+  }
+  .kd-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 22px; font-size: 15px; flex: none; }
+  .kd-grid { flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: minmax(0, 1fr); gap: 10px; padding: 0 12px 12px; min-height: 0; }
+  .kd-card {
+    display: flex; flex-direction: column; border-radius: 16px; overflow: hidden; background: #1d1d1f; color: #f5f5f7;
+    transition: opacity 400ms var(--ease-apple), transform 500ms var(--ease-apple);
+  }
+  .kd-card.is-gone { opacity: 0; transform: scale(0.9); }
+  .kd-head { display: flex; justify-content: space-between; padding: 10px 14px; font-weight: 700; font-size: 18px; color: #111; background: #30d158; transition: background-color 600ms; }
+  .kd-card[data-level='1'] .kd-head { background: #ff9f0a; }
+  .kd-card[data-level='2'] .kd-head { background: #ff453a; }
+  .kd-where { padding: 10px 14px 0; font-size: 14px; color: #a1a1a6; }
+  .kd-lines { flex: 1; padding: 6px 14px; font-size: 17px; line-height: 1.5; overflow: hidden; }
+  .kd-ready { margin: 0 10px 10px; min-height: 44px; border-radius: 12px; background: #2c2c2e; color: #f5f5f7; font-weight: 600; transition: background-color 200ms, transform 140ms var(--ease-out); }
+  .kd-ready:active { transform: scale(0.96); }
+  @media (hover: hover) and (pointer: fine) { .kd-ready:hover { background: #3a3a3c; } }
+
+  @media (max-width: 899px) {
+    .kitchen-stage { height: auto; padding-inline: 12px; }
+    .kd { height: auto; border-radius: 22px; }
+    .kd-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: auto; }
+    .kd-lines { font-size: 15px; }
+    .kd-head { font-size: 16px; }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const win = document.querySelector<HTMLElement>('[data-kwin]');
+  const stage = document.querySelector<HTMLElement>('[data-kitchen]');
+
+  // The window opens to the whole screen as the page scrolls.
+  if (win && stage && !reduce) {
+    const mm = gsap.matchMedia();
+    mm.add('(min-width: 900px)', () => {
+      gsap.fromTo(
+        win,
+        { scale: 0.56, borderRadius: 40 },
+        {
+          scale: 1,
+          ease: 'none',
+          scrollTrigger: { trigger: stage, start: 'top top', end: '+=120%', scrub: 0.6, pin: true },
+        },
+      );
+    });
+  }
+
+  // Live timers and the "Listo" button.
+  const grid = document.querySelector<HTMLElement>('[data-k-grid]');
+  if (grid) {
+    const t0 = Date.now();
+    const pending = document.querySelector<HTMLElement>('[data-k-pending]')!;
+    const done = document.querySelector<HTMLElement>('[data-k-done]')!;
+    const mmss = (s: number) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+    const tick = () => {
+      const el = Math.floor((Date.now() - t0) / 1000);
+      grid.querySelectorAll<HTMLElement>('.kd-card').forEach((c) => {
+        const s = +c.dataset.start! + el;
+        c.querySelector<HTMLElement>('[data-t]')!.textContent = mmss(s);
+        c.dataset.level = s >= 600 ? '2' : s >= 300 ? '1' : '0';
+      });
+    };
+    tick();
+    setInterval(tick, 1000);
+    grid.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('.kd-ready');
+      if (!btn) return;
+      const card = btn.closest<HTMLElement>('.kd-card')!;
+      card.classList.add('is-gone');
+      done.textContent = String(+done.textContent! + 1);
+      pending.textContent = String(+pending.textContent! - 1);
+      setTimeout(() => {
+        card.remove();
+        if (!grid.children.length) {
+          const li = document.createElement('li');
+          li.className = 'col-span-full grid place-items-center text-[#a1a1a6] text-lg';
+          li.textContent = 'Cocina al día. Ni un pedido pendiente.';
+          grid.append(li);
+        }
+      }, 450);
+    });
+  }
+</script>

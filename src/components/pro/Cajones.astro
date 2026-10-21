@@ -1,0 +1,106 @@
+---
+import { Image } from 'astro:assets';
+import cashlogy from '../../assets/cashlogy.jpg';
+import glory from '../../assets/glory-ci5.png';
+
+const models = [
+  {
+    id: 'cashlogy', name: 'Cashlogy 1500', img: cashlogy,
+    alt: 'Cajón de cobro automático Cashlogy POS 1500 de Azkoyen',
+    lead: 'El más vendido en calidad y precio, para negocios con movimiento de efectivo medio y alto.',
+    specs: [['Compatible', 'con cualquier TPV'], ['Configuración', 'atendido, desatendido o mixto'], ['Desde', '8 € al día']],
+  },
+  {
+    id: 'glory', name: 'Glory CI-5', img: glory,
+    alt: 'Cajón de cobro automático Glory CashInfinity CI-5',
+    lead: 'El cajón más pequeño del mercado, sin renunciar a velocidad ni fiabilidad.',
+    specs: [['Velocidad', '3 billetes por segundo'], ['Carga', 'hasta 40 billetes en fajo'], ['Desde', '8 € al día']],
+  },
+];
+const modes = [
+  ['Atendido', 'El empleado controla el cajón.'],
+  ['Desatendido', 'El cliente paga directamente.'],
+  ['Mixto', 'El cliente mete las monedas y el empleado, los billetes.'],
+];
+const perks = [
+  'Cuadra siempre la caja: cambios exactos, sin descuadres.',
+  'Nadie toca dinero y comida a la vez.',
+  'Efectivo protegido de robos y hurtos.',
+  'Colas más cortas y empleados más libres.',
+];
+---
+
+<section id="cajones" class="light pb-[clamp(100px,12vw,160px)] pt-[clamp(100px,12vw,160px)]" aria-labelledby="caj-title">
+  <div class="wrap text-center">
+    <h2 id="caj-title" class="text-title" data-rise>Cajón de cobro automático.</h2>
+    <p class="mx-auto mt-4 text-[clamp(1.5rem,3vw,2.5rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-grey-2" data-rise style="--i:1">La caja cuadra sola.</p>
+  </div>
+
+  <div class="wrap-wide mt-12 md:mt-16">
+    <div class="viewer relative mx-auto aspect-[16/10] max-w-[1100px] overflow-hidden rounded-[28px] bg-white">
+      {models.map((m, i) => (
+        <Image src={m.img} alt={m.alt} widths={[600, 1000]} sizes="(min-width: 1100px) 1000px, 92vw" class="caj-img absolute inset-0 m-auto h-[82%] w-[82%] object-contain" data-model={m.id} loading="lazy" style={i === 0 ? '' : 'opacity:0;transform:scale(0.96)'} />
+      ))}
+    </div>
+
+    <div class="mt-8 flex justify-center">
+      <div class="seg" role="tablist" aria-label="Modelo de cajón">
+        {models.map((m, i) => (
+          <button type="button" role="tab" class="seg-btn" aria-selected={i === 0 ? 'true' : 'false'} data-model={m.id}>{m.name}</button>
+        ))}
+      </div>
+    </div>
+
+    {models.map((m, i) => (
+      <div class="caj-info mx-auto mt-12 max-w-[980px]" data-model={m.id} hidden={i !== 0}>
+        <p class="mx-auto max-w-[40ch] text-center text-lead">{m.lead}</p>
+        <dl class="mt-10 grid gap-6 text-center sm:grid-cols-3">
+          {m.specs.map(([k, v]) => (
+            <div><dt class="text-[15px] text-grey-2">{k}</dt><dd class="mt-1 text-[clamp(1.5rem,2.4vw,2rem)] font-semibold tracking-[-0.025em]">{v}</dd></div>
+          ))}
+        </dl>
+      </div>
+    ))}
+  </div>
+
+  <div class="wrap mt-20 grid gap-4 md:grid-cols-3">
+    {modes.map(([k, v], i) => (
+      <div class="rounded-[22px] bg-white p-7" data-rise style={`--i:${i}`}>
+        <h3 class="text-[24px] tracking-[-0.02em]">{k}</h3>
+        <p class="muted mt-2">{v}</p>
+      </div>
+    ))}
+  </div>
+
+  <ul class="wrap mt-16 grid gap-x-10 gap-y-6 text-[19px] sm:grid-cols-2">
+    {perks.map((p) => <li class="flex gap-3" data-rise><span class="mt-[0.55em] h-2 w-2 flex-none rounded-full bg-red"></span>{p}</li>)}
+  </ul>
+
+  <div class="wrap mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
+    <a class="pill" href="#demo">Pedir información</a>
+    <a class="more" href="tel:+34633748236">Servicio técnico 633 748 236</a>
+  </div>
+</section>
+
+<style>
+  .caj-img { transition: opacity 600ms var(--ease-apple), transform 800ms var(--ease-apple); }
+  .seg { display: inline-flex; padding: 4px; border-radius: 999px; background: #e8e8ed; }
+  .seg-btn { min-height: 44px; padding: 0 22px; border-radius: 999px; font-size: 16px; color: #1d1d1f; transition: background-color 250ms, box-shadow 250ms; }
+  .seg-btn[aria-selected='true'] { background: #fff; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12); font-weight: 600; }
+</style>
+
+<script>
+  const btns = document.querySelectorAll<HTMLButtonElement>('.seg-btn');
+  btns.forEach((b) => {
+    b.addEventListener('click', () => {
+      const id = b.dataset.model;
+      btns.forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+      document.querySelectorAll<HTMLElement>('.caj-img').forEach((img) => {
+        const on = img.dataset.model === id;
+        img.style.opacity = on ? '1' : '0';
+        img.style.transform = on ? 'none' : 'scale(0.96)';
+      });
+      document.querySelectorAll<HTMLElement>('.caj-info').forEach((el) => (el.hidden = el.dataset.model !== id));
+    });
+  });
+</script>

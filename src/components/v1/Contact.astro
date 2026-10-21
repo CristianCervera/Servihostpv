@@ -1,0 +1,105 @@
+---
+import { zz } from '../../lib/zigzag';
+---
+
+<section id="contacto" class="frame py-[clamp(120px,12vw,180px)]" aria-labelledby="contacto-title">
+  <div class="grid-12">
+    <form
+      class="coupon zz relative col-span-12 grid bg-accent text-white lg:col-span-10 lg:col-start-2 lg:grid-cols-[46%_1fr]"
+      style={zz({ top: true, bottom: true, depth: 10, teeth: 60, teethSm: 22 })}
+      data-contact
+      novalidate
+      aria-labelledby="contacto-title"
+    >
+      <div class="flex flex-col justify-between gap-6 p-6 pt-10 md:p-10 lg:p-12" data-rise>
+        <h2 id="contacto-title" class="max-w-[12ch] text-head !text-white">Pide una demo en tu local</h2>
+        <p class="max-w-[34ch] text-[1rem] leading-[1.5]">
+          Te llamamos, vemos tu negocio y te proponemos el equipo justo. ¿Prefieres hablar ya? Técnico
+          <a class="link font-semibold" href="tel:+34633748236">633 748 236</a> · Comercial
+          <a class="link font-semibold" href="tel:+34633088505">633 088 505</a>.
+        </p>
+      </div>
+
+      <div class="perf flex flex-col gap-2.5 p-6 pb-10 md:p-10 lg:p-12">
+        <label class="sr-only" for="f-name">Nombre</label>
+        <input id="f-name" name="nombre" class="field" placeholder="Nombre" autocomplete="name" required />
+        <label class="sr-only" for="f-tel">Teléfono</label>
+        <input id="f-tel" name="telefono" class="field" placeholder="Teléfono" type="tel" autocomplete="tel" inputmode="tel" required />
+        <label class="sr-only" for="f-mail">Email (opcional)</label>
+        <input id="f-mail" name="email" class="field" placeholder="Email (opcional)" type="email" autocomplete="email" />
+        <label class="sr-only" for="f-biz">Tipo de negocio</label>
+        <select id="f-biz" name="negocio" class="field">
+          <option>Bar o cafetería</option>
+          <option>Restaurante</option>
+          <option>Comida para llevar o delivery</option>
+          <option>Tienda o comercio</option>
+          <option>Hotel u ocio</option>
+          <option>Otro</option>
+        </select>
+        <button type="submit" class="submit mt-1.5 min-h-[56px] bg-field px-5 text-left font-medium text-white">
+          Enviar solicitud
+        </button>
+        <p class="min-h-[1.5rem] text-[15px]" data-form-status role="status"></p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<style>
+  .field {
+    min-height: 54px; width: 100%; padding: 0 16px;
+    background: #fbe3e1; color: var(--color-ink); font-size: 1rem;
+    border: 0; border-radius: 0; appearance: none;
+  }
+  .field::placeholder { color: #7a2e29; opacity: 1; }
+  .field:focus-visible { outline: 3px solid var(--color-ink); outline-offset: 0; }
+  .field[aria-invalid='true'] { outline: 3px solid var(--color-ink); }
+  select.field { cursor: pointer; }
+  .submit { transition: transform 160ms var(--ease-out), background-color 200ms ease; }
+  .submit:active { transform: scale(0.98); }
+  @media (hover: hover) and (pointer: fine) { .submit:hover { background: #333; } }
+
+  /* Notches and perforation, as on a coupon. */
+  .perf { position: relative; }
+  .perf::before {
+    content: ""; position: absolute; left: 0; right: 0; top: 0;
+    border-top: 5px dotted var(--color-ground);
+  }
+  @media (min-width: 1024px) {
+    .perf::before { right: auto; bottom: 28px; top: 28px; border-top: 0; border-left: 5px dotted var(--color-ground); }
+    .coupon::before, .coupon::after {
+      content: ""; position: absolute; left: 46%; width: 28px; height: 28px; margin-left: -12px;
+      background: var(--color-ground); border-radius: 50%;
+    }
+    .coupon::before { top: -6px; }
+    .coupon::after { bottom: -6px; }
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact]');
+  if (form) {
+    const status = form.querySelector<HTMLElement>('[data-form-status]')!;
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const name = String(data.get('nombre') ?? '').trim();
+      const tel = String(data.get('telefono') ?? '').trim();
+      const nameEl = form.querySelector<HTMLInputElement>('#f-name')!;
+      const telEl = form.querySelector<HTMLInputElement>('#f-tel')!;
+      nameEl.setAttribute('aria-invalid', String(!name));
+      telEl.setAttribute('aria-invalid', String(!tel));
+      if (!name || !tel) {
+        status.textContent = !name ? 'Escribe tu nombre para que sepamos a quién llamar.' : 'Déjanos un teléfono para llamarte.';
+        (!name ? nameEl : telEl).focus();
+        return;
+      }
+      const body =
+        `Hola, quiero una demo de TPV en mi local.\n\n` +
+        `Nombre: ${name}\nTeléfono: ${tel}\nEmail: ${data.get('email') || '-'}\nNegocio: ${data.get('negocio')}\n`;
+      window.location.href =
+        `mailto:info@servihostpv.com?subject=${encodeURIComponent('Demo de TPV para ' + name)}&body=${encodeURIComponent(body)}`;
+      status.textContent = 'Abriendo tu correo con la solicitud lista para enviar.';
+    });
+  }
+</script>

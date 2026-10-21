@@ -1,0 +1,46 @@
+---
+const stats = [
+  { pre: '', n: 20, unit: ' s', text: 'entre copias de seguridad en la nube.' },
+  { pre: '', n: 3, unit: '', text: 'billetes por segundo con el cajón Glory CI-5.' },
+  { pre: '< ', n: 2, unit: ' min', text: 'para cerrar la caja al final del día.' },
+  { pre: '', n: 15, unit: '+', text: 'años instalando TPV en hostelería y comercio.' },
+];
+---
+
+<section class="wrap pt-[clamp(100px,12vw,180px)]" aria-labelledby="num-title">
+  <h2 id="num-title" class="max-w-[16ch] text-title" data-rise>Rápido en todo lo que importa.</h2>
+  <dl class="mt-14 grid gap-x-10 gap-y-14 sm:grid-cols-2 md:mt-20">
+    {stats.map((s, i) => (
+      <div data-rise style={`--i:${i % 2}`}>
+        <dt class="text-[clamp(4.5rem,11vw,9rem)] font-semibold leading-[0.9] tracking-[-0.05em] tabular-nums">
+          <span class="figure-red">{s.pre}</span><span data-count={s.n}>{s.n}</span><span class="figure-red">{s.unit}</span>
+        </dt>
+        <dd class="mt-4 max-w-[24ch] text-lead text-grey">{s.text}</dd>
+      </div>
+    ))}
+  </dl>
+</section>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const els = document.querySelectorAll<HTMLElement>('[data-count]');
+  if (!reduce && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        const el = e.target as HTMLElement;
+        io.unobserve(el);
+        const to = +el.dataset.count!;
+        const t0 = performance.now();
+        const step = (t: number) => {
+          const p = Math.min(1, (t - t0) / 1400);
+          el.textContent = String(Math.round(to * (1 - Math.pow(1 - p, 3))));
+          if (p < 1) requestAnimationFrame(step);
+        };
+        el.textContent = '0';
+        requestAnimationFrame(step);
+      }
+    }, { threshold: 0.6 });
+    els.forEach((el) => io.observe(el));
+  }
+</script>

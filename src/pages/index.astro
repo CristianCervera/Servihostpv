@@ -1,0 +1,38 @@
+---
+import Pro from '../layouts/Pro.astro';
+import Nav from '../components/pro/Nav.astro';
+import Hero from '../components/pro/Hero.astro';
+import Highlights from '../components/pro/Highlights.astro';
+import Story from '../components/pro/Story.astro';
+import Kitchen from '../components/pro/Kitchen.astro';
+import Numbers from '../components/pro/Numbers.astro';
+import Cajones from '../components/pro/Cajones.astro';
+import Hardware from '../components/pro/Hardware.astro';
+import Bento from '../components/pro/Bento.astro';
+import Service from '../components/pro/Service.astro';
+import Clients from '../components/pro/Clients.astro';
+import Demo from '../components/pro/Demo.astro';
+import Footer from '../components/pro/Footer.astro';
+---
+
+<Pro
+  title="SERVIHOST TPV · Software TPV para hostelería y comercio en Valencia"
+  description="Software TPV, comanderas Android, monitor de cocina, carta digital y cajones de cobro automático Cashlogy y Glory. Instalación y servicio técnico en Valencia."
+>
+  <Nav />
+  <main id="main">
+    <Hero />
+    <Highlights />
+    <Story />
+    <Kitchen />
+    <Numbers />
+    <div class="mt-[clamp(100px,12vw,180px)]"></div>
+    <Cajones />
+    <Hardware />
+    <Bento />
+    <Service />
+    <Clients />
+    <Demo />
+  </main>
+  <Footer />
+</Pro>

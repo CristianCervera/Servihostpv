@@ -1,0 +1,65 @@
+---
+import { Image } from 'astro:assets';
+import sirena from '../../assets/la-sirena.jpg';
+---
+
+<section class="service pt-[clamp(100px,12vw,180px)]" aria-labelledby="srv-title">
+  <div class="wrap text-center">
+    <h2 id="srv-title" class="text-title" data-rise>Lo instalamos.<br />Lo atendemos.</h2>
+  </div>
+
+  <div class="srv-stage mt-12" data-srv>
+    <figure class="srv-win" data-srv-win>
+      <Image src={sirena} alt="Barra del Restaurante La Sirena con su TPV táctil y el cajón Cashlogy, instalados por SERVIHOST" widths={[900, 1600, 2048]} sizes="100vw" class="srv-img h-full w-full object-cover" loading="lazy" />
+      <figcaption class="srv-cap">Restaurante La Sirena. TPV y cajón de cobro Cashlogy.</figcaption>
+    </figure>
+  </div>
+
+  <div class="wrap mt-16 grid gap-12 md:mt-24 md:grid-cols-3">
+    <div data-rise>
+      <h3 class="text-[24px] tracking-[-0.02em]">Servicio técnico oficial.</h3>
+      <p class="mt-3 text-grey">De GLOP, BDP y Firesoft. Resolvemos incidencias en persona o en remoto, con respuesta en tiempo récord.</p>
+    </div>
+    <div data-rise style="--i:1">
+      <h3 class="text-[24px] tracking-[-0.02em]">Instalación y formación.</h3>
+      <p class="mt-3 text-grey">Montamos los equipos y enseñamos a tu equipo a usarlos. Copias de seguridad cada 20 segundos desde el primer día.</p>
+    </div>
+    <div data-rise style="--i:2">
+      <h3 class="text-[24px] tracking-[-0.02em]">Sin sorpresas.</h3>
+      <p class="mt-3 text-grey">Te proponemos solo lo que tu negocio necesita y te avisamos de pagos, facturas y actualizaciones.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .srv-stage { height: 100svh; display: grid; place-items: center; overflow: hidden; }
+  .srv-win { position: relative; width: 100%; height: 100%; overflow: hidden; margin: 0; }
+  .srv-cap {
+    position: absolute; left: var(--m-wide); bottom: 28px; padding: 8px 14px; border-radius: 999px;
+    background: rgba(0, 0, 0, 0.6); color: #f5f5f7; font-size: 14px;
+  }
+  @media (max-width: 899px) {
+    .srv-stage { height: auto; padding-inline: 12px; }
+    .srv-win { aspect-ratio: 4 / 3; border-radius: 22px; }
+    .srv-cap { position: static; display: block; background: none; padding: 12px 4px 0; color: var(--color-grey); }
+    .srv-win { overflow: visible; }
+    .srv-win img { border-radius: 22px; }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const stage = document.querySelector<HTMLElement>('[data-srv]');
+  const win = document.querySelector<HTMLElement>('[data-srv-win]');
+  if (stage && win && !reduce) {
+    gsap.matchMedia().add('(min-width: 900px)', () => {
+      const tl = gsap.timeline({ scrollTrigger: { trigger: stage, start: 'top top', end: '+=110%', scrub: 0.6, pin: true } });
+      // A window in the middle of the screen opens to the whole room.
+      tl.fromTo(win, { clipPath: 'inset(22% 26% 22% 26% round 28px)' }, { clipPath: 'inset(0% 0% 0% 0% round 0px)', ease: 'power2.inOut' }, 0)
+        .fromTo(win.querySelector('img'), { scale: 1.25 }, { scale: 1, ease: 'power2.out' }, 0);
+    });
+  }
+</script>

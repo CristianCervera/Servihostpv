@@ -1,0 +1,33 @@
+---
+const rowA = ['Restaurante La Sirena', 'Las Tapas de San Lorenzo', 'Casa Jerónimo', 'Hotel Tent Granada', 'Mamma Nostra Calpe', 'Street Food by Chema Soler', 'Friends Segorbe'];
+const rowB = ['Juguettos', 'Ferretería El Globo', 'MadLab Zaragoza', 'Los Batanes', 'Pollos Asados Alymar', 'A Mi Aire Gastro Bar', 'Huerta El Galeón', 'Happy Food España'];
+---
+
+<section id="clientes" class="overflow-hidden pt-[clamp(100px,12vw,180px)]" aria-labelledby="cli-title">
+  <div class="wrap">
+    <h2 id="cli-title" class="max-w-[14ch] text-title" data-rise>Ya cobran con SERVIHOST.</h2>
+    <p class="mt-5 max-w-[44ch] text-lead text-grey" data-rise style="--i:1">Bares, restaurantes, hoteles, tiendas y centros de ocio, de Valencia a Granada.</p>
+  </div>
+
+  <ul class="sr-only">{[...rowA, ...rowB].map((c) => <li>{c}</li>)}</ul>
+  <div class="mq mt-12 md:mt-16" aria-hidden="true">
+    <div class="mq-row"><div class="mq-track">{[...rowA, ...rowA].map((c) => <span>{c}</span>)}</div></div>
+    <div class="mq-row mq-rev"><div class="mq-track">{[...rowB, ...rowB].map((c) => <span>{c}</span>)}</div></div>
+  </div>
+</section>
+
+<style>
+  .mq { display: flex; flex-direction: column; gap: 10px; }
+  .mq-row { overflow: hidden; }
+  .mq-track { display: flex; width: max-content; gap: 10px; }
+  .mq-track span {
+    flex: none; padding: 18px 28px; border-radius: 999px; background: var(--color-card);
+    font-size: clamp(1.25rem, 2.2vw, 1.875rem); font-weight: 600; letter-spacing: -0.025em; color: #f5f5f7;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .mq-track { animation: mq 60s linear infinite; }
+    .mq-rev .mq-track { animation-direction: reverse; animation-duration: 70s; }
+    .mq:hover .mq-track { animation-play-state: paused; }
+  }
+  @keyframes mq { to { transform: translateX(calc(-50% - 5px)); } }
+</style>

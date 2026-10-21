@@ -1,0 +1,102 @@
+---
+import { zigzag } from '../../lib/zigzag';
+
+// The name closes the page as a row of torn tickets of different lengths, drawn in SVG.
+interface Strip { x: number; y: number; w: number; h: number; letter: string; red: boolean; points: string }
+
+function strips(rows: string[], width: number, rowH: number, gap: number, size: number) {
+  const heights = [1, 0.74, 0.88, 0.64, 0.96, 0.8, 0.7, 0.92, 0.78];
+  const out: Strip[] = [];
+  let k = 0;
+  rows.forEach((word, row) => {
+    const n = word.length;
+    const w = (width - gap * (n - 1)) / n;
+    const base = (row + 1) * rowH + row * gap;
+    [...word].forEach((letter, i) => {
+      const h = rowH * heights[k++ % heights.length];
+      const x = i * (w + gap);
+      const y = base - h;
+      const teeth = 6, depth = 9;
+      const pts: string[] = [];
+      for (let t = 0; t <= teeth; t++) {
+        pts.push(`${(x + (t / teeth) * w).toFixed(1)},${(y + depth).toFixed(1)}`);
+        if (t < teeth) pts.push(`${(x + ((t + 0.5) / teeth) * w).toFixed(1)},${y.toFixed(1)}`);
+      }
+      pts.push(`${(x + w).toFixed(1)},${base}`, `${x.toFixed(1)},${base}`);
+      out.push({ x, y, w, h, letter, red: letter === 'I', points: pts.join(' ') });
+    });
+  });
+  return { strips: out, height: rows.length * rowH + (rows.length - 1) * gap, size };
+}
+
+const wide = strips(['SERVIHOST'], 1000, 225, 4, 170);
+const tall = strips(['SERVI', 'HOST'], 500, 250, 6, 150);
+
+const cols = [
+  { title: 'Hostelería', links: [['Software TPV', '#funciones'], ['Comanderas Android', '#funciones'], ['Monitor de cocina', '#funciones'], ['Carta digital', '#funciones']] },
+  { title: 'Comercio', links: [['ZPOS para tiendas', '#funciones'], ['Tienda online', '#funciones'], ['Balanzas y lectores', '#hardware']] },
+  { title: 'Cobro', links: [['Cashlogy 1500', '#cajones'], ['Glory CI-5', '#cajones'], ['Terminales SAM4S', '#hardware']] },
+  { title: 'Empresa', links: [['Servicio técnico', '#empresa'], ['Clientes', '#clientes'], ['Contacto', '#contacto'], ['Política de privacidad', 'https://servihostpv.com/politica-privacidad/']] },
+];
+---
+
+<footer class="frame bg-ground pb-8" aria-label="Pie de página">
+  <div class="mark" role="img" aria-label="SERVIHOST Systems">
+    {[{ d: wide, cls: 'hidden md:block', w: 1000 }, { d: tall, cls: 'md:hidden', w: 500 }].map(({ d, cls, w }) => (
+      <svg class={`w-full ${cls}`} viewBox={`0 0 ${w} ${d.height}`} aria-hidden="true">
+        {d.strips.map((st, i) => (
+          <g class="strip" style={`transition-delay:${i * 50}ms`}>
+            <polygon points={st.points} fill={st.red ? '#d92b21' : '#000'} />
+            <text x={st.x + st.w / 2} y={st.y + st.h + d.size * 0.06} text-anchor="middle" font-size={d.size} font-weight="600" fill="#fff" letter-spacing="-0.04em" style="font-family:Switzer,sans-serif">{st.letter}</text>
+          </g>
+        ))}
+      </svg>
+    ))}
+  </div>
+
+  <div class="grid-12 mt-14 gap-y-10">
+    <nav class="col-span-12 grid grid-cols-2 gap-x-[var(--g)] gap-y-8 md:col-span-8 md:grid-cols-4" aria-label="Pie">
+      {cols.map((c) => (
+        <div>
+          <h2 class="text-[15px] font-semibold tracking-[-0.01em]">{c.title}</h2>
+          <ul class="mt-3 space-y-2 text-[15px]">
+            {c.links.map(([label, href]) => <li><a class="link" href={href}>{label}</a></li>)}
+          </ul>
+        </div>
+      ))}
+    </nav>
+    <address class="col-span-12 space-y-2 text-[15px] not-italic md:col-span-4">
+      <p><a class="link font-medium" href="mailto:info@servihostpv.com">info@servihostpv.com</a></p>
+      <p>Servicio técnico <a class="link font-medium" href="tel:+34633748236">633 748 236</a></p>
+      <p>Comercial <a class="link font-medium" href="tel:+34633088505">633 088 505</a></p>
+      <p>Valencia</p>
+    </address>
+  </div>
+
+  <div class="mt-14 flex items-center justify-between gap-4 text-[15px]">
+    <p>© 2026 SERVIHOST Systems</p>
+    <a class="btn btn-ink !min-h-[44px] !px-4 text-[15px]" href="#top">Volver arriba</a>
+  </div>
+</footer>
+
+<style>
+  .mark { overflow: hidden; }
+  .mark svg { display: block; }
+  @media (prefers-reduced-motion: no-preference) {
+    .js .mark .strip { transform: translateY(70px); transition: transform 1000ms var(--ease-out); }
+    .js .mark.is-in .strip { transform: none; }
+  }
+</style>
+
+<script>
+  const mark = document.querySelector<HTMLElement>('.mark');
+  if (mark) {
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        mark.classList.add('is-in');
+        io.disconnect();
+      }
+    }, { threshold: 0.2 });
+    io.observe(mark);
+  }
+</script>

@@ -1,0 +1,199 @@
+---
+import { Image } from 'astro:assets';
+import cashlogy from '../../assets/cashlogy.jpg';
+import sirena from '../../assets/la-sirena.jpg';
+---
+
+<section class="pt-[clamp(80px,10vw,140px)]" aria-labelledby="hl-title">
+  <div class="wrap-wide flex items-end justify-between gap-6">
+    <h2 id="hl-title" class="text-title" data-rise>Lo más destacado.</h2>
+  </div>
+
+  <div class="hl-track mt-10 md:mt-14" data-hl tabindex="0" aria-label="Lo más destacado, carrusel">
+    <!-- 1. Comanderas -->
+    <article class="hl-card bg-card" aria-roledescription="diapositiva" aria-label="1 de 5">
+      <p class="hl-copy"><strong>Comanderas Android.</strong> La comanda llega a cocina antes de que el camarero vuelva a la barra.</p>
+      <div class="hl-phone" aria-hidden="true">
+        <div class="hl-phone-screen">
+          <div class="flex justify-between bg-[#111] px-4 py-3 text-[13px] text-white"><span class="font-semibold">Mesa 12 · Salón</span><span>14:05</span></div>
+          <div class="space-y-2 p-3 text-[14px] text-[#111]">
+            <div class="flex justify-between rounded-xl bg-white px-3 py-3"><span>2 × Esgarraet</span><span>15,00 €</span></div>
+            <div class="flex justify-between rounded-xl bg-white px-3 py-3"><span>1 × Paella valenciana</span><span>14,00 €</span></div>
+            <div class="flex justify-between rounded-xl bg-white px-3 py-3"><span>3 × Caña</span><span>6,60 €</span></div>
+            <div class="flex justify-between rounded-xl bg-white px-3 py-3"><span>1 × Horchata</span><span>2,80 €</span></div>
+            <div class="mt-3 rounded-xl bg-red py-3 text-center font-semibold text-white">Enviar · 38,40 €</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- 2. Cajón -->
+    <article class="hl-card bg-white text-graphite" aria-roledescription="diapositiva" aria-label="2 de 5">
+      <p class="hl-copy"><strong>Cajón de cobro automático.</strong> La caja cuadra sola y se cierra en menos de 2 minutos.</p>
+      <Image src={cashlogy} alt="Cajón de cobro automático Cashlogy POS 1500" widths={[500, 800]} sizes="(min-width: 768px) 50vw, 80vw" class="hl-product" loading="lazy" />
+    </article>
+
+    <!-- 3. Instalaciones -->
+    <article class="hl-card hl-photo" aria-roledescription="diapositiva" aria-label="3 de 5">
+      <Image src={sirena} alt="Barra del Restaurante La Sirena con su TPV y su cajón Cashlogy" widths={[800, 1400]} sizes="(min-width: 768px) 80vw, 90vw" class="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+      <div class="hl-scrim" aria-hidden="true"></div>
+      <p class="hl-copy relative"><strong>Más de 15 años montando barras.</strong> Como la del Restaurante La Sirena: TPV y Cashlogy instalados por nosotros.</p>
+    </article>
+
+    <!-- 4. Delivery -->
+    <article class="hl-card bg-card" aria-roledescription="diapositiva" aria-label="4 de 5">
+      <p class="hl-copy"><strong>Delivery dentro del TPV.</strong> Los pedidos de Glovo, Uber Eats y Deliveroo entran solos, sin errores ni penalizaciones.</p>
+      <div class="hl-discs" aria-hidden="true">
+        <span class="disc bg-snow text-graphite">Glovo</span>
+        <span class="disc bg-card-2 text-snow">Uber Eats</span>
+        <span class="disc bg-red text-white">Deliveroo</span>
+      </div>
+    </article>
+
+    <!-- 5. Nube -->
+    <article class="hl-card bg-card" aria-roledescription="diapositiva" aria-label="5 de 5">
+      <p class="hl-copy"><strong>Copia en la nube cada 20 segundos.</strong> Y si se cae internet, el TPV sigue cobrando.</p>
+      <div class="hl-ring" aria-hidden="true">
+        <svg viewBox="0 0 200 200" class="h-full w-full -rotate-90">
+          <circle cx="100" cy="100" r="88" fill="none" stroke="#2c2c2e" stroke-width="14" />
+          <circle cx="100" cy="100" r="88" fill="none" stroke="#ff5a4f" stroke-width="14" stroke-linecap="round" pathLength="100" stroke-dasharray="100" class="ring-arc" />
+        </svg>
+        <div class="absolute inset-0 grid place-items-center text-center">
+          <div><div class="text-[clamp(3rem,7vw,5.5rem)] font-semibold leading-none tracking-[-0.04em] tabular-nums" data-ring-n>20</div><div class="text-grey">segundos para la próxima copia</div></div>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <div class="mt-8 flex items-center justify-center gap-4">
+    <div class="dots flex items-center gap-3 rounded-full bg-[#1d1d1f] px-5 py-[18px]" role="tablist" aria-label="Elegir diapositiva">
+      {[0, 1, 2, 3, 4].map((i) => (
+        <button type="button" role="tab" class="dot" data-dot={i} aria-label={`Diapositiva ${i + 1}`} aria-selected={i === 0 ? 'true' : 'false'}><span class="dot-fill"></span></button>
+      ))}
+    </div>
+    <button type="button" class="grid h-14 w-14 place-items-center rounded-full bg-[#1d1d1f] text-white" data-hl-toggle aria-label="Pausar">
+      <svg data-icon-pause width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><rect width="4" height="16" rx="1" fill="currentColor" /><rect x="10" width="4" height="16" rx="1" fill="currentColor" /></svg>
+      <svg data-icon-play hidden width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M1 1.5v13a1 1 0 0 0 1.5.86l11-6.5a1 1 0 0 0 0-1.72l-11-6.5A1 1 0 0 0 1 1.5Z" fill="currentColor" /></svg>
+    </button>
+  </div>
+</section>
+
+<style>
+  .hl-track {
+    display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+    padding-inline: var(--m-wide); scroll-padding-inline: var(--m-wide);
+    overscroll-behavior-x: contain;
+  }
+  .hl-track::-webkit-scrollbar { display: none; }
+  .hl-card {
+    position: relative; overflow: hidden; flex: none; scroll-snap-align: center;
+    width: min(1060px, 86vw); height: min(640px, 72svh); min-height: 460px;
+    border-radius: 28px; padding: clamp(28px, 4vw, 56px);
+  }
+  .hl-copy { position: relative; z-index: 2; max-width: 30ch; font-size: clamp(1.25rem, 2vw, 1.75rem); line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; color: var(--color-grey); }
+  .hl-copy strong { color: #f5f5f7; font-weight: 600; }
+  .bg-white .hl-copy { color: #6e6e73; }
+  .bg-white .hl-copy strong { color: #1d1d1f; }
+  .hl-photo .hl-copy { position: absolute; left: clamp(28px, 4vw, 56px); bottom: clamp(28px, 4vw, 56px); color: #d2d2d7; }
+  .hl-scrim { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.78)); }
+  .hl-product { position: absolute; right: 4%; bottom: 0; width: min(560px, 62%); height: auto; }
+  .hl-phone { position: absolute; right: 8%; bottom: -60px; width: min(320px, 60%); padding: 10px; border-radius: 44px; background: #0d0d0e; box-shadow: inset 0 0 0 1px #3a3a3c; transform: rotate(-6deg); }
+  .hl-phone-screen { border-radius: 34px; overflow: hidden; background: #eef0f3; min-height: 440px; }
+  .hl-discs { position: absolute; right: 6%; bottom: 10%; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; }
+  .disc { display: inline-flex; align-items: center; height: clamp(64px, 9vw, 108px); padding: 0 clamp(24px, 3vw, 44px); border-radius: 999px; font-size: clamp(1.5rem, 3.2vw, 2.75rem); font-weight: 700; letter-spacing: -0.03em; }
+  .hl-ring { position: absolute; right: 8%; bottom: 10%; width: min(380px, 52vw); aspect-ratio: 1; }
+  .ring-arc { stroke-dashoffset: 0; }
+
+  .dot { position: relative; width: 8px; height: 8px; border-radius: 99px; background: #6e6e73; overflow: hidden; transition: width 400ms var(--ease-apple), background-color 200ms; }
+  .dot[aria-selected='true'] { width: 48px; background: #48484a; }
+  .dot-fill { position: absolute; inset: 0; width: 0; background: #f5f5f7; border-radius: inherit; }
+  .dot[aria-selected='true'] .dot-fill { animation: fill var(--dur, 6s) linear forwards; }
+  .dots.is-paused .dot-fill { animation-play-state: paused; }
+  @keyframes fill { to { width: 100%; } }
+
+  @media (max-width: 767px) {
+    .hl-card { height: 560px; min-height: 0; }
+    .hl-product { width: 86%; right: 7%; }
+    .hl-phone { width: 62%; bottom: -120px; }
+    .hl-ring { width: 64vw; right: 50%; translate: 50% 0; }
+  }
+</style>
+
+<script>
+  const track = document.querySelector<HTMLElement>('[data-hl]');
+  if (track) {
+    const cards = [...track.querySelectorAll<HTMLElement>('.hl-card')];
+    const dots = [...document.querySelectorAll<HTMLButtonElement>('[data-dot]')];
+    const dotsBox = document.querySelector<HTMLElement>('.dots')!;
+    const toggle = document.querySelector<HTMLButtonElement>('[data-hl-toggle]')!;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const DUR = 6000;
+    let index = 0;
+    let playing = !reduce;
+    let timer: number | undefined;
+    let visible = false;
+
+    const setDot = (i: number) => {
+      dots.forEach((d, k) => {
+        d.setAttribute('aria-selected', String(k === i));
+        // restart the fill animation
+        const f = d.querySelector<HTMLElement>('.dot-fill')!;
+        f.style.animation = 'none';
+        void f.offsetWidth;
+        f.style.animation = '';
+      });
+    };
+    const go = (i: number, user = false) => {
+      index = (i + cards.length) % cards.length;
+      const c = cards[index];
+      track.scrollTo({ left: c.offsetLeft - (track.clientWidth - c.clientWidth) / 2, behavior: reduce ? 'auto' : 'smooth' });
+      setDot(index);
+      if (user) schedule();
+    };
+    const schedule = () => {
+      clearTimeout(timer);
+      if (playing && visible) timer = window.setTimeout(() => go(index + 1), DUR);
+    };
+    const setPlaying = (p: boolean) => {
+      playing = p;
+      dotsBox.classList.toggle('is-paused', !p);
+      toggle.setAttribute('aria-label', p ? 'Pausar' : 'Reproducir');
+      toggle.querySelector('[data-icon-pause]')!.toggleAttribute('hidden', !p);
+      toggle.querySelector('[data-icon-play]')!.toggleAttribute('hidden', p);
+      schedule();
+    };
+    dots.forEach((d, i) => d.addEventListener('click', () => go(i, true)));
+    toggle.addEventListener('click', () => setPlaying(!playing));
+    track.addEventListener('pointerdown', () => setPlaying(false));
+    track.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(index + 1, true); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(index - 1, true); }
+    });
+    // Keep the dots in step when the visitor swipes.
+    let st: number | undefined;
+    track.addEventListener('scroll', () => {
+      clearTimeout(st);
+      st = window.setTimeout(() => {
+        const mid = track.scrollLeft + track.clientWidth / 2;
+        const i = cards.reduce((best, c, k) => (Math.abs(c.offsetLeft + c.clientWidth / 2 - mid) < Math.abs(cards[best].offsetLeft + cards[best].clientWidth / 2 - mid) ? k : best), 0);
+        if (i !== index) { index = i; setDot(i); schedule(); }
+      }, 120);
+    });
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; schedule(); }, { threshold: 0.4 }).observe(track);
+    setPlaying(playing);
+
+    // The live backup ring: counts down from 20 seconds, again and again.
+    const n = document.querySelector<HTMLElement>('[data-ring-n]');
+    const arc = document.querySelector<SVGCircleElement>('.ring-arc');
+    if (n && arc) {
+      const t0 = performance.now();
+      const tick = () => {
+        const s = ((performance.now() - t0) / 1000) % 20;
+        n.textContent = String(Math.ceil(20 - s) || 20);
+        arc.style.strokeDashoffset = String(reduce ? 0 : (s / 20) * 100);
+        requestAnimationFrame(tick);
+      };
+      tick();
+    }
+  }
+</script>

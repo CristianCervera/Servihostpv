@@ -1,0 +1,329 @@
+---
+import { zz } from '../../lib/zigzag';
+
+type Dest = 'cocina' | 'barra';
+interface Item { name: string; price: number; dest: Dest }
+
+const menu: Record<string, Item[]> = {
+  Barra: [
+    { name: 'Café con leche', price: 1.6, dest: 'barra' },
+    { name: 'Cortado', price: 1.4, dest: 'barra' },
+    { name: 'Caña', price: 2.2, dest: 'barra' },
+    { name: 'Horchata', price: 2.8, dest: 'barra' },
+    { name: 'Agua de Valencia', price: 14, dest: 'barra' },
+    { name: 'Tinto de verano', price: 3, dest: 'barra' },
+  ],
+  Tapas: [
+    { name: 'Esgarraet', price: 7.5, dest: 'cocina' },
+    { name: 'Clóchinas', price: 9, dest: 'cocina' },
+    { name: 'Bravas', price: 5.5, dest: 'cocina' },
+    { name: 'Sepia', price: 11, dest: 'cocina' },
+    { name: 'Titaina', price: 8, dest: 'cocina' },
+    { name: 'Calamar', price: 9.5, dest: 'cocina' },
+  ],
+  Arroces: [
+    { name: 'Paella valenciana', price: 14, dest: 'cocina' },
+    { name: 'Arroz a banda', price: 13.5, dest: 'cocina' },
+    { name: 'Arroz negro', price: 13.5, dest: 'cocina' },
+    { name: 'Fideuà', price: 13, dest: 'cocina' },
+    { name: 'Arroz al horno', price: 12, dest: 'cocina' },
+    { name: 'Senyoret', price: 15, dest: 'cocina' },
+  ],
+  Almuerzo: [
+    { name: 'Almuerzo completo', price: 7.5, dest: 'cocina' },
+    { name: 'Bocadillo brascada', price: 6.5, dest: 'cocina' },
+    { name: 'Chivito', price: 6.9, dest: 'cocina' },
+    { name: 'Cremaet', price: 2.2, dest: 'barra' },
+    { name: 'Cacaus i tramussos', price: 2, dest: 'barra' },
+    { name: 'Zumo de naranja', price: 3.2, dest: 'barra' },
+  ],
+};
+
+const eur = (n: number) => n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+
+// What the ticket shows before any tap (and without script).
+const starter: [string, number][] = [['Clóchinas', 1], ['Esgarraet', 1], ['Agua de Valencia', 1]];
+const all = Object.values(menu).flat();
+const starterLines = starter.map(([name, qty]) => ({ ...all.find((i) => i.name === name)!, qty }));
+const starterTotal = starterLines.reduce((s, l) => s + l.price * l.qty, 0);
+---
+
+<header class="frame relative z-20 flex items-center justify-between pt-6 md:pt-7">
+  <a href="/" class="flex items-center gap-2.5" aria-label="SERVIHOST, inicio">
+    <img src="/logo-mark.png" alt="" width="40" height="36" class="h-9 w-auto" />
+    <span class="text-[1.25rem] font-semibold tracking-[-0.03em]">SERVIHOST</span>
+  </a>
+  <nav aria-label="Principal" class="hidden items-center gap-8 text-[15px] lg:flex">
+    <a class="link" href="#funciones">Funciones</a>
+    <a class="link" href="#hardware">Hardware</a>
+    <a class="link" href="#cajones">Cajones de cobro</a>
+    <a class="link" href="#clientes">Clientes</a>
+    <a class="btn !min-h-[44px] !px-5 text-[15px]" href="#contacto">Pedir una demo</a>
+  </nav>
+  <a class="btn !min-h-[44px] !px-4 text-[15px] lg:!hidden" href="tel:+34633748236">Llamar<span class="hidden sm:inline">al 633 748 236</span></a>
+</header>
+
+<section class="hero relative" aria-labelledby="hero-title">
+  <div class="frame grid-12 relative z-10 pt-14 md:pt-[clamp(64px,10vh,120px)]">
+    <div class="col-span-12 md:col-span-7 lg:col-span-6">
+      <h1 id="hero-title" class="text-[clamp(2.6rem,10vw,3.5rem)] leading-[0.95] md:text-display" data-rise>
+        TPV para hostelería y comercio
+      </h1>
+      <p class="mt-8 max-w-[40ch] text-[1.0625rem] md:text-[1.1875rem]" data-rise style="--i:1">
+        Instalamos el software, las comanderas, el monitor de cocina y el cajón de cobro de tu bar,
+        restaurante o tienda en Valencia. Y seguimos ahí cuando algo falla: más de 15 años en el sector.
+      </p>
+      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3" data-rise style="--i:2">
+        <a class="btn" href="#contacto">Pedir una demo en tu local</a>
+        <a class="link font-medium" href="tel:+34633748236">o llama al 633 748 236</a>
+      </div>
+      <ul class="stub-list mt-12 hidden max-w-[34ch] space-y-2.5 md:block" data-rise style="--i:3">
+        <li>Servicio técnico oficial de GLOP, BDP y Firesoft</li>
+        <li>Copia en la nube cada 20 segundos</li>
+        <li>Cajones de cobro desde 8 € al día</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stage zz relative mt-12 bg-accent min-[1400px]:absolute min-[1400px]:mt-0" style={zz({ top: true, depth: 14, teeth: 44, teethSm: 16 })}>
+    <div class="stage-inner flex flex-col gap-6 px-4 pb-16 pt-10 md:px-14 md:pt-16 lg:flex-row lg:items-start lg:gap-8">
+      <div
+        class="comandera w-full max-w-[640px] shrink-0 bg-ground text-ink md:w-[620px]"
+        data-ui
+        data-comandera
+        role="group"
+        aria-label="Comandera de prueba: toca productos para añadirlos a la cuenta de la mesa 4"
+      >
+        <div class="flex items-center justify-between bg-field px-4 py-3 text-[14px] text-white">
+          <span class="font-medium">Terraza · Mesa 4</span>
+          <span class="tabular-nums" data-clock>13:42</span>
+        </div>
+
+        <div class="grid md:grid-cols-[1fr_224px]">
+          <div class="p-3">
+            <div class="grid grid-cols-4 gap-1.5" role="tablist" aria-label="Familias">
+              {Object.keys(menu).map((cat, i) => (
+                <button
+                  type="button"
+                  role="tab"
+                  class="cat-tab min-h-[44px] bg-surface px-1 text-[14px] font-medium"
+                  aria-selected={i === 0 ? 'true' : 'false'}
+                  aria-controls={`fam-${i}`}
+                  id={`tab-${i}`}
+                  data-cat={i}
+                >{cat}</button>
+              ))}
+            </div>
+            {Object.entries(menu).map(([cat, items], i) => (
+              <div
+                class="mt-1.5 grid grid-cols-2 gap-1.5 sm:grid-cols-3"
+                role="tabpanel"
+                id={`fam-${i}`}
+                aria-labelledby={`tab-${i}`}
+                hidden={i !== 0}
+              >
+                {items.map((it) => (
+                  <button
+                    type="button"
+                    class="prod flex min-h-[76px] flex-col justify-between bg-surface p-2.5 text-left"
+                    data-name={it.name}
+                    data-price={it.price}
+                    data-dest={it.dest}
+                    aria-label={`Añadir ${it.name}, ${eur(it.price)}`}
+                  >
+                    <span class="text-[14px] font-medium leading-tight">{it.name}</span>
+                    <span class="text-[14px] tabular-nums text-muted">{eur(it.price)}</span>
+                  </button>
+                ))}
+              </div>
+            ))}
+          </div>
+
+          <div class="flex flex-col bg-surface p-3 md:min-h-[100%]">
+            <div class="flex items-baseline justify-between pb-2 text-[14px]">
+              <span class="font-medium">Cuenta</span>
+              <span class="text-muted" data-count>{starterLines.length} líneas</span>
+            </div>
+            <ul class="ticket-lines flex-1 space-y-1 text-[14px]" data-lines aria-live="polite">
+              {starterLines.map((l) => (
+                <li class="flex justify-between gap-2"><span>{l.qty} × {l.name}</span><span class="tabular-nums">{eur(l.price * l.qty)}</span></li>
+              ))}
+            </ul>
+            <div class="mt-3 flex items-baseline justify-between border-t-2 border-dashed border-surface-2 pt-3">
+              <span class="text-[14px] font-medium">Total</span>
+              <span class="text-[1.375rem] font-semibold tabular-nums tracking-[-0.02em]" data-total>{eur(starterTotal)}</span>
+            </div>
+            <button type="button" class="send mt-3 min-h-[48px] bg-field px-3 text-[15px] font-medium text-white" data-send>
+              Enviar a cocina y barra
+            </button>
+            <p class="mt-2 min-h-[1.25rem] text-[13px] text-muted" data-status role="status"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="printed flex w-full max-w-[640px] flex-row gap-3 lg:w-[200px] lg:flex-col" data-printed aria-label="Tickets impresos" aria-live="polite">
+        <p class="text-[1rem] leading-snug text-white" data-printed-hint>
+          Toca la carta y envía la comanda: verás salir el ticket de cocina y el de barra, como en tu local.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    /* The stage starts 42% down and spans columns 5–12, bleeding right and bottom. */
+    --stage-top: max(42svh, 380px);
+  }
+  @media (min-width: 1400px) {
+    .hero { min-height: calc(var(--stage-top) + 470px); }
+    .stage {
+      top: var(--stage-top);
+      left: calc(var(--m) + (100% - 2 * var(--m) + var(--g)) / 3);
+      right: 0;
+      bottom: 0;
+    }
+  }
+  .cat-tab[aria-selected='true'] { background: var(--color-ink); color: #fff; }
+  .prod, .cat-tab, .send { transition: transform 140ms var(--ease-out), background-color 160ms ease; }
+  .prod:active, .cat-tab:active, .send:active { transform: scale(0.96); }
+  @media (hover: hover) and (pointer: fine) {
+    .prod:hover { background: var(--color-surface-2); }
+    .send:hover { background: #333; }
+  }
+  .prod.is-bump { background: var(--color-ink); color: #fff; }
+  .prod.is-bump span { color: #fff; }
+
+  :global(.paper) {
+    position: relative;
+    width: 100%;
+    background: #fff;
+    color: var(--color-ink);
+    padding: 14px 14px 22px;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+  :global(.paper-slot) { overflow: hidden; flex: 1 1 0; min-width: 0; }
+  @media (min-width: 1024px) { :global(.paper-slot) { flex: none; } }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.paper) { animation: feed 1100ms steps(14, end) both; }
+  }
+  @keyframes feed {
+    from { transform: translateY(-100%); }
+    to { transform: none; }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-comandera]');
+  if (root) {
+    const eur = (n: number) =>
+      n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    type Line = { name: string; price: number; dest: string; qty: number };
+    const order = new Map<string, Line>();
+
+    // Seed the order from what the server rendered.
+    for (const [name, qty] of [['Clóchinas', 1], ['Esgarraet', 1], ['Agua de Valencia', 1]] as const) {
+      const b = root.querySelector<HTMLElement>(`.prod[data-name="${name}"]`);
+      if (b) order.set(name, { name, price: +b.dataset.price!, dest: b.dataset.dest!, qty });
+    }
+
+    const lines = root.querySelector<HTMLUListElement>('[data-lines]')!;
+    const total = root.querySelector<HTMLElement>('[data-total]')!;
+    const count = root.querySelector<HTMLElement>('[data-count]')!;
+    const status = root.querySelector<HTMLElement>('[data-status]')!;
+    const send = root.querySelector<HTMLButtonElement>('[data-send]')!;
+    const printed = document.querySelector<HTMLElement>('[data-printed]')!;
+
+    const clock = root.querySelector<HTMLElement>('[data-clock]');
+    const tick = () => {
+      if (clock) clock.textContent = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    };
+    tick();
+    setInterval(tick, 30000);
+
+    const render = () => {
+      lines.innerHTML = '';
+      let sum = 0;
+      for (const l of order.values()) {
+        sum += l.price * l.qty;
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'flex w-full justify-between gap-2 text-left';
+        btn.setAttribute('aria-label', `Quitar una unidad de ${l.name}`);
+        btn.innerHTML = `<span>${l.qty} × ${l.name}</span><span class="tabular-nums">${eur(l.price * l.qty)}</span>`;
+        btn.addEventListener('click', () => {
+          l.qty -= 1;
+          if (l.qty <= 0) order.delete(l.name);
+          render();
+        });
+        li.append(btn);
+        lines.append(li);
+      }
+      if (!order.size) {
+        const li = document.createElement('li');
+        li.className = 'text-muted';
+        li.textContent = 'Mesa sin pedido. Toca un producto.';
+        lines.append(li);
+      }
+      total.textContent = eur(sum);
+      count.textContent = `${order.size} ${order.size === 1 ? 'línea' : 'líneas'}`;
+      send.disabled = order.size === 0;
+      send.style.opacity = order.size === 0 ? '0.4' : '';
+    };
+
+    root.querySelectorAll<HTMLButtonElement>('.cat-tab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        root.querySelectorAll<HTMLButtonElement>('.cat-tab').forEach((t) => {
+          const on = t === tab;
+          t.setAttribute('aria-selected', String(on));
+          root.querySelector<HTMLElement>(`#fam-${t.dataset.cat}`)!.hidden = !on;
+        });
+      });
+    });
+
+    root.querySelectorAll<HTMLButtonElement>('.prod').forEach((b) => {
+      b.addEventListener('click', () => {
+        const name = b.dataset.name!;
+        const l = order.get(name) ?? { name, price: +b.dataset.price!, dest: b.dataset.dest!, qty: 0 };
+        l.qty += 1;
+        order.set(name, l);
+        status.textContent = '';
+        b.classList.add('is-bump');
+        setTimeout(() => b.classList.remove('is-bump'), 160);
+        render();
+      });
+    });
+
+    let n = 26;
+    send.addEventListener('click', () => {
+      if (!order.size) return;
+      const time = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+      printed.innerHTML = '';
+      const byDest = { cocina: [] as Line[], barra: [] as Line[] };
+      for (const l of order.values()) byDest[l.dest as 'cocina' | 'barra'].push(l);
+      n += 1;
+      for (const dest of ['cocina', 'barra'] as const) {
+        if (!byDest[dest].length) continue;
+        const slot = document.createElement('div');
+        slot.className = 'paper-slot';
+        const paper = document.createElement('div');
+        paper.className = 'paper';
+        paper.style.clipPath = `polygon(0 0,100% 0,100% calc(100% - 8px),${Array.from({ length: 12 }, (_, i) => `${100 - (i + 0.5) * (100 / 12)}% 100%,${100 - (i + 1) * (100 / 12)}% calc(100% - 8px)`).join(',')})`;
+        paper.innerHTML =
+          `<div class="flex justify-between font-semibold"><span>${dest === 'cocina' ? 'Cocina' : 'Barra'}</span><span>#${n}</span></div>` +
+          `<div class="mb-2 text-[12.5px]">Terraza · Mesa 4 · ${time}</div>` +
+          byDest[dest].map((l) => `<div class="flex justify-between gap-2"><span>${l.qty} × ${l.name}</span></div>`).join('');
+        slot.append(paper);
+        printed.append(slot);
+      }
+      const sum = [...order.values()].reduce((s, l) => s + l.price * l.qty, 0);
+      status.textContent = `Comanda #${n} enviada · ${eur(sum)}`;
+      order.clear();
+      render();
+    });
+
+    render();
+  }
+</script>

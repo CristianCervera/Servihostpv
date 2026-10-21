@@ -1,0 +1,29 @@
+---
+const cols = [
+  { title: 'Hostelería', links: [['Software TPV', '#top'], ['Comanderas Android', '#comanda'], ['Monitor de cocina', '#cocina'], ['Carta digital', '#comanda']] },
+  { title: 'Cobro', links: [['Cashlogy 1500', '#cajones'], ['Glory CI-5', '#cajones'], ['Cashkeeper y Cashguard', '#cajones']] },
+  { title: 'Hardware', links: [['SAM4S Titan 360', '#hardware'], ['SAM4S Forza', '#hardware'], ['Balanzas Dibal', '#hardware']] },
+  { title: 'Empresa', links: [['Clientes', '#clientes'], ['Pedir demo', '#demo'], ['Política de privacidad', 'https://servihostpv.com/politica-privacidad/']] },
+];
+---
+
+<footer class="bg-snow text-[12px] leading-[1.4] text-[#6e6e73]">
+  <div class="wrap py-5">
+    <p class="border-b border-[#d2d2d7] pb-4">
+      El precio «desde 8 € al día» corresponde a la solución de alquiler de cajones de cobro. Consulta condiciones con nuestro equipo comercial.
+      Cashlogy es una marca de Azkoyen; Glory y CashInfinity, de Glory Ltd.; SAM4S, Dibal, Honeywell, GLOP, Glovo, Uber Eats, Deliveroo, WordPress, Prestashop y Shopify pertenecen a sus respectivos titulares.
+    </p>
+    <nav class="grid grid-cols-2 gap-6 py-6 md:grid-cols-4" aria-label="Pie">
+      {cols.map((c) => (
+        <div>
+          <h2 class="font-semibold text-[#1d1d1f]">{c.title}</h2>
+          <ul class="mt-2 space-y-2">{c.links.map(([l, h]) => <li><a class="hover:underline" href={h}>{l}</a></li>)}</ul>
+        </div>
+      ))}
+    </nav>
+    <div class="flex flex-col gap-2 border-t border-[#d2d2d7] pt-4 sm:flex-row sm:justify-between">
+      <p>Copyright © 2026 SERVIHOST Systems. Valencia.</p>
+      <p><a class="hover:underline" href="mailto:info@servihostpv.com">info@servihostpv.com</a> · <a class="hover:underline" href="tel:+34633748236">633 748 236</a> · <a class="hover:underline" href="/v1">Versión anterior</a></p>
+    </div>
+  </div>
+</footer>

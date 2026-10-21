@@ -1,0 +1,55 @@
+---
+import { Image } from 'astro:assets';
+import titan from '../../assets/titan.jpg';
+import forza from '../../assets/forza.jpg';
+import dibal from '../../assets/dibal.jpg';
+import impresora from '../../assets/impresora.jpg';
+---
+
+<section id="hardware" class="light pb-[clamp(100px,12vw,160px)]" aria-labelledby="hw-title">
+  <div class="wrap">
+    <h2 id="hw-title" class="max-w-[14ch] text-title" data-rise>Hardware a la altura.</h2>
+    <p class="mt-5 max-w-[44ch] text-lead text-grey-2" data-rise style="--i:1">
+      Trabajamos con las marcas líderes del punto de venta: SAM4S, filial de Samsung, Dibal y Honeywell.
+    </p>
+  </div>
+
+  <div class="bento wrap-wide mt-12 md:mt-16">
+    <article class="tile t-titan" data-rise>
+      <div class="tile-copy"><h3>SAM4S Titan 360</h3><p>Elegante, fiable y con acceso fácil a sus componentes para el punto de venta más exigente.</p></div>
+      <Image src={titan} alt="Terminal táctil SAM4S Titan 360 en blanco" widths={[400, 800]} sizes="(min-width: 900px) 40vw, 90vw" class="tile-img" loading="lazy" />
+    </article>
+    <article class="tile t-forza" data-rise style="--i:1">
+      <div class="tile-copy"><h3>SAM4S Forza</h3><p>Diseño y velocidad de servicio, con impresora integrada en la base.</p></div>
+      <Image src={forza} alt="Terminal SAM4S Forza con impresora térmica" widths={[400, 700]} sizes="(min-width: 900px) 30vw, 90vw" class="tile-img" loading="lazy" />
+    </article>
+    <article class="tile t-print" data-rise style="--i:2">
+      <div class="tile-copy"><h3>Impresoras SAM4S</h3><p>Térmicas, triple interfaz y bonitas en la barra.</p></div>
+      <Image src={impresora} alt="Impresora térmica de tickets SAM4S" widths={[400]} sizes="(min-width: 900px) 25vw, 90vw" class="tile-img" loading="lazy" />
+    </article>
+    <article class="tile t-dibal !bg-[#f0f0f0]" data-rise style="--i:1">
+      <div class="tile-copy"><h3>Dibal y Honeywell</h3><p>Balanzas de pesaje y etiquetado desde 1985, y lectores de códigos de barras de referencia.</p></div>
+      <Image src={dibal} alt="Balanzas táctiles Dibal y lector de códigos de barras Honeywell" widths={[500, 900]} sizes="(min-width: 900px) 45vw, 90vw" class="tile-img" loading="lazy" />
+    </article>
+  </div>
+</section>
+
+<style>
+  .bento { display: grid; gap: 16px; }
+  .tile { position: relative; overflow: hidden; border-radius: 28px; background: #fff; padding: 32px; display: flex; flex-direction: column; min-height: 460px; }
+  .tile-copy h3 { font-size: clamp(1.5rem, 2.2vw, 2rem); letter-spacing: -0.025em; color: #1d1d1f; }
+  .tile-copy p { margin-top: 8px; max-width: 34ch; color: #6e6e73; font-size: 17px; }
+  .tile-img { margin: auto auto 0; width: 82%; height: auto; max-height: 340px; object-fit: contain; transition: transform 900ms var(--ease-apple); }
+  @media (hover: hover) and (pointer: fine) { .tile:hover .tile-img { transform: scale(1.04); } }
+  @media (min-width: 900px) {
+    .bento { grid-template-columns: repeat(6, 1fr); }
+    .t-titan { grid-column: span 3; grid-row: span 2; }
+    .t-titan .tile-img { max-height: 620px; width: 90%; }
+    .t-forza { grid-column: span 3; }
+    .t-print { grid-column: span 3; }
+    .t-dibal { grid-column: span 6; flex-direction: row; align-items: center; min-height: 420px; }
+    .t-dibal .tile-img { margin: 0 0 0 auto; width: 50%; max-height: 380px; }
+    .t-forza, .t-print { flex-direction: row; align-items: flex-end; }
+    .t-forza .tile-img, .t-print .tile-img { width: 48%; margin: 0 0 0 auto; }
+  }
+</style>

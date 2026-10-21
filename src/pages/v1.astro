@@ -1,0 +1,32 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/v1/Hero.astro';
+import Features from '../components/v1/Features.astro';
+import Hardware from '../components/v1/Hardware.astro';
+import Flow from '../components/v1/Flow.astro';
+import Band from '../components/v1/Band.astro';
+import Cajones from '../components/v1/Cajones.astro';
+import About from '../components/v1/About.astro';
+import Clients from '../components/v1/Clients.astro';
+import Contact from '../components/v1/Contact.astro';
+import Footer from '../components/v1/Footer.astro';
+---
+
+<Layout
+  title="SERVIHOST · TPV para hostelería y comercio en Valencia"
+  description="Software TPV, comanderas Android, monitor de cocina, carta digital y cajones de cobro automático Cashlogy y Glory. Instalación y servicio técnico en Valencia."
+>
+  <div id="top"></div>
+  <main id="main">
+    <Hero />
+    <Features />
+    <Hardware />
+    <Flow />
+    <Band />
+    <Cajones />
+    <About />
+    <Clients />
+    <Contact />
+  </main>
+  <Footer />
+</Layout>

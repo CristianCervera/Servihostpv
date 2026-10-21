@@ -1,0 +1,55 @@
+---
+import { Image } from 'astro:assets';
+import hostelero from '../../assets/hostelero.jpg';
+
+const clients = [
+  { name: 'Restaurante La Sirena', what: 'Cajón de cobro Cashlogy' },
+  { name: 'Las Tapas de San Lorenzo', what: 'Software GLOP y cajón, en el centro de Valencia' },
+  { name: 'Casa Jerónimo', what: 'Tres locales en un solo sistema, con Glory CI-5' },
+  { name: 'Ferretería El Globo', what: 'Cinco generaciones, ahora con TPV' },
+  { name: 'Hotel Tent Granada', what: 'Equipos y programa de gestión' },
+  { name: 'Friends Segorbe', what: 'TPV con cinco comanderas' },
+  { name: 'Mamma Nostra Calpe', what: 'Comanderas con impresión por zonas', wide: true },
+  { name: 'Juguettos', what: 'Cajón inteligente Glory CI-5', wide: true },
+];
+---
+
+<section id="clientes" class="frame pt-[clamp(120px,14vw,200px)]" aria-labelledby="clientes-title">
+  <div class="clients">
+    <div class="c-head bg-accent p-5 text-white md:p-6" data-rise>
+      <h2 id="clientes-title" class="max-w-[12ch] text-head !text-white">Ya cobran con nosotros</h2>
+    </div>
+    {clients.map((c, i) => (
+      <div class={`c-tile bg-surface p-5 md:p-6 ${c.wide ? 'c-late' : ''}`} data-rise style={`--i:${i % 4}`}>
+        <h3 class="text-lead leading-[1.05] tracking-[-0.03em]">{c.name}</h3>
+        <p class="mt-auto pt-4 leading-snug">{c.what}</p>
+      </div>
+    ))}
+    <figure class="c-photo relative overflow-hidden bg-surface" data-rise>
+      <Image src={hostelero} alt="Hostelero con delantal sonriendo tras la barra de su cafetería" widths={[480, 900]} sizes="(min-width: 768px) 50vw, 100vw" class="absolute inset-0 h-full w-full object-cover object-[50%_25%]" loading="lazy" />
+    </figure>
+  </div>
+  <p class="mt-6 max-w-[70ch]">
+    Y también MadLab Zaragoza, Street Food by Chema Soler, Los Batanes, Pollos Asados Alymar, A Mi Aire Gastro Bar
+    y Huerta El Galeón, entre otros.
+  </p>
+</section>
+
+<style>
+  .clients {
+    display: grid;
+    gap: 6px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .c-head { grid-column: 1 / -1; min-height: 120px; }
+  .c-tile { display: flex; flex-direction: column; aspect-ratio: 1 / 1; }
+  .c-late { display: none; }
+  .c-photo { grid-column: 1 / -1; aspect-ratio: 3 / 2; }
+  @media (min-width: 1024px) {
+    .clients { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+    .c-head { grid-column: span 2; aspect-ratio: auto; }
+    .c-tile { aspect-ratio: 3 / 2; }
+    .c-late { display: flex; }
+    .c-photo { grid-column: 1 / 3; grid-row: 3; aspect-ratio: auto; }
+  }
+</style>
